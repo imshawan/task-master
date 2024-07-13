@@ -1,4 +1,4 @@
-const { body, validationResult } = require('express-validator');
+const { validationResult } = require('express-validator');
 const { response } = require('../utilities');
 
 const middlewares = module.exports;
