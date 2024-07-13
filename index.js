@@ -13,21 +13,24 @@ require('dotenv').config();
  */
 
 var port = normalizePort(process.env.PORT || '3000');
-app.set('port', port);
 
-/**
- * Create HTTP server.
- */
+app.initialize().then(expressApp => {
+    expressApp.set('port', port);
 
-var server = http.createServer(app);
+    /**
+     * Create HTTP server.
+     */
 
-/**
- * Listen on provided port, on all network interfaces.
- */
+    var server = http.createServer(expressApp);
 
-server.listen(port);
-server.on('error', onError);
-server.on('listening', onListening);
+    /**
+     * Listen on provided port, on all network interfaces.
+     */
+
+    server.listen(port);
+    server.on('error', onError);
+    server.on('listening', onListening.bind(null, server));
+});
 
 /**
  * Normalize a port into a number, string, or false.
@@ -81,7 +84,7 @@ function onError(error) {
  * Event listener for HTTP server "listening" event.
  */
 
-function onListening() {
+function onListening(server) {
     var addr = server.address();
     var bind = typeof addr === 'string'
         ? 'pipe ' + addr

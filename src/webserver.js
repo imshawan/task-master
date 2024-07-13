@@ -3,36 +3,47 @@ const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
+const passport = require('passport');
+
+const middlewares = require('./middlewares');
+const database = require('./database');
 
 const router = require('./routes/index');
 
-const app = express();
+module.exports.initialize = async function () {
+    const app = express();
 
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
+    await database.initializeConnection();
+    await initializeExpressServer(app);
 
-app.use(logger('dev'));
-app.use(express.json({limit: '1mb'}));
-app.use(express.urlencoded({ extended: true, limit: '1mb' }));
-app.use(cookieParser());
+    app.use('/', router);
 
-app.use('/', router);
+    // catch 404 and forward to error handler
+    app.use(function (req, res, next) {
+        next(createError(404));
+    });
 
-// catch 404 and forward to error handler
-app.use(function(req, res, next) {
-  next(createError(404));
-});
+    // error handler
+    app.use(middlewares.handleErrors);
 
-// error handler
-app.use(function(err, req, res, next) {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
+    return app;
+};
 
-  // render the error page
-  res.status(err.status || 500);
-  res.render('error');
-});
+/**
+ * @function initializeExpressServer
+ * @description All the express level middleware attachments such as auth and etc happens here
+ * @param {*} app 
+ */
+async function initializeExpressServer(app) {
+    // view engine setup
+    app.set('views', path.join(__dirname, 'views'));
+    app.set('view engine', 'jade');
 
-module.exports = app;
+    app.use(logger('dev'));
+    app.use(express.json({ limit: '1mb' }));
+    app.use(express.urlencoded({ extended: true, limit: '1mb' }));
+    app.use(cookieParser());
+
+    passport.use(middlewares.authentication.JwtStrategy);
+    app.use(passport.initialize());
+}

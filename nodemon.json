@@ -3,6 +3,6 @@
     "ext": "js,json",
     "ignore": ["node_modules", "client"],
     "exec": "node index.js",
-    "delay": 4000
+    "delay": 3000
   }
   

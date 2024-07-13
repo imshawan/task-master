@@ -1,0 +1,44 @@
+const { ExtractJwt, Strategy: JwtStrategy } = require('passport-jwt');
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
+const _ = require('lodash');
+const { User } = require('../models');
+const utilities = require('../utilities');
+const passport = require('passport');
+
+const auth = module.exports;
+
+const jwtSecret = String(process.env.JWT_SECRET);
+const validuserFields = ['username', 'fullname', 'email'];
+
+// Passport JWT strategy
+auth.jwtOptions = {
+    jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+    secretOrKey: jwtSecret
+};
+
+auth.validate = async function (req, res, next) {
+    passport.authenticate('jwt', { session: false }, async function (err, userData, info) {
+        if (err || !userData) {
+            let message = err ? (err.message || err) : (info && info.message ? info.message : 'Unauthorized');
+            return utilities.response.format(401, res, {message});
+        }
+        
+        req.user = userData;
+
+        next();
+        
+    })(req, res, next);
+}
+
+auth.JwtStrategy = new JwtStrategy(this.jwtOptions, async (payload, done) => {
+    try {
+        const user = await User.findById(payload.id, validuserFields);
+        if (user) {
+            return done(null, user);
+        }
+        return done(null, false);
+    } catch (error) {
+        return done(error, false);
+    }
+})
