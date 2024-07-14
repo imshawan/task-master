@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {
-    Box, Typography, Container, Avatar, Grid, Divider, useTheme, Paper, LinearProgress, useMediaQuery,
+    Box, Typography, Container, Avatar, Grid, Divider, useTheme, Paper, LinearProgress, useMediaQuery, CircularProgress
 } from '@mui/material';
 import { makeStyles } from 'tss-react/mui';
 import SaveIcon from '@mui/icons-material/Save';
@@ -16,7 +16,7 @@ import { toast } from 'react-toastify';
 import NavBar from '../components/NavBar';
 import TextField from '../components/TextField';
 import Button from '../components/Button';
-import { endpoints, httpClient as http } from '../utilities';
+import { endpoints, httpClient as http, parseParams } from '../utilities';
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -48,6 +48,7 @@ const useStyles = makeStyles()((theme) => ({
         margin: theme.spacing(3, 0),
     },
     saveButton: {
+        minWidth: '185px'
     },
     statsPaper: {
         padding: theme.spacing(2),
@@ -89,6 +90,7 @@ const Profile = () => {
     const [user, setUser] = useState(initialValues);
     const [fullname, setFullname] = useState('');
     const [initials, setInitials] = useState('');
+    const [fetching, setIsFetching] = useState(false);
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
     const schema = zod.object({
@@ -112,8 +114,27 @@ const Profile = () => {
         return formatter.format(date);
     }
 
-    const onSubmit = (formData) => {
-        console.log(formData)
+    const onSubmit = async (formData) => {
+        setIsFetching(true);
+
+        try {
+            let { data } = await http.put(endpoints.UPDATE_PROFILE, formData);
+            if (data && data.response && data.response.message) {
+                toast.success(data.response.message);
+                
+                localStorage.setItem('user', JSON.stringify({...user, fullname: formData.fullname}));
+            }
+
+        } catch ({ message, response }) {
+
+            if (response && response.data.status && response.data.status?.message) {
+                message = response.data.status.message;
+            }
+
+            toast.error(message);
+        } finally {
+            setIsFetching(false);
+        }
     };
 
     useEffect(() => {
@@ -249,8 +270,9 @@ const Profile = () => {
                                     startIcon={<SaveIcon />}
                                     className={classes.saveButton}
                                     onClick={handleSubmit(onSubmit)}
+                                    disabled={fetching}
                                 >
-                                    Save Changes
+                                    {fetching ? <CircularProgress size={26} /> : 'Save Changes'}
                                 </Button>
                             </Box>
                         </form>

@@ -4,7 +4,7 @@ const {User} = require('../models');
 const utilities = require('../utilities');
 
 const auth = module.exports;
-const validuserFields = ['username', 'fullname', 'email', 'joinedAt'];
+const validuserFields = ['_id', 'username', 'fullname', 'email', 'joinedAt'];
 const jwtSecret = String(process.env.JWT_SECRET);
 
 auth.signin = async function(req) {

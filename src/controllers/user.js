@@ -8,4 +8,7 @@ module.exports = {
     async get (req, res) {
         response.format(200, res, await api.user.get(req));
     },
+    async update (req, res) {
+        response.format(200, res, await api.user.update(req));
+    },
 }

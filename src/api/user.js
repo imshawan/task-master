@@ -3,7 +3,7 @@ const {User} = require('../models');
 const utilities = require('../utilities');
 
 const user = module.exports;
-const validuserFields = ['username', 'fullname', 'email', 'joinedAt'];
+const validuserFields = ['_id', 'username', 'fullname', 'email', 'joinedAt'];
 
 user.register = async function (req, res) {
     const {username, email, password, fullname} = req.body;
@@ -27,4 +27,18 @@ user.register = async function (req, res) {
 
 user.get = async function (req) {
     return await User.findById(req.user._id, validuserFields);
+}
+
+user.update = async function (req) {
+    const {fullname} = req.body;
+    if (!fullname) return;
+
+    const user = await User.findById(req.user._id);
+    if (user.fullname === fullname) return;
+
+    user.fullname = fullname;
+
+    await user.save();
+
+    return { message: 'User updated successfully' };
 }
