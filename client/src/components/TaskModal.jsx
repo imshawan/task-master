@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
-    Box, Grid, Button, useTheme, Select, MenuItem, InputLabel, FormControl,
+    Box, Grid, Button, useTheme, Select, MenuItem, InputLabel, FormControl, CircularProgress,
     FormHelperText, Dialog, DialogActions, DialogTitle, DialogContent,
 } from '@mui/material';
 import { makeStyles } from 'tss-react/mui';
@@ -10,7 +10,9 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
 import { z as zod } from "zod";
+import { toast } from 'react-toastify';
 import TextField from './TextField';
+import { endpoints, httpClient as http } from '../utilities';
 
 const useStyles = makeStyles()((theme) => ({
     modal: {
@@ -39,12 +41,12 @@ const useStyles = makeStyles()((theme) => ({
     }
 }));
 
-const TaskModal = ({ open, onClose }) => {
-    const initialValues = { title: '', description: '', status: 'To Do', dueDate: new Date() };
+const TaskModal = ({ open, onClose, onCreate }) => {
+    const initialValues = { title: '', description: '', status: '', dueDate: new Date() };
     const { classes } = useStyles();
     const theme = useTheme();
     const [newTask, setNewTask] = useState(initialValues);
-    const [dueDate, setDueDate] = useState(null);
+    const [fetching, setIsFetching] = useState(false);
 
     const schema = zod.object({
         title: zod.string().min(5, { message: "Title is required" }),
@@ -54,18 +56,57 @@ const TaskModal = ({ open, onClose }) => {
 
     const { control, handleSubmit, formState: { errors } } = useForm({ defaultValues: initialValues, resolver: zodResolver(schema) });
 
-    const addTask = (values) => {
-        console.log(values)
+    const addTask = async (values) => {
+        setIsFetching(true);
+        let formData = {...values, dueDate: new Date(newTask.dueDate).toISOString(), status: newTask.status};
+
+        try {
+            let { data } = await http.post(endpoints.CREATE_TASK, formData);
+            if (data && data.response && data.response.message) {
+                toast.success(data.response.message);
+
+                if (onClose && typeof onClose === 'function') {
+                    onClose();
+                }
+
+                if (onCreate && typeof onCreate === 'function') {
+                    onCreate(data.response.task);
+                }
+                
+            }
+
+        } catch ({ message, response }) {
+
+            if (response && response.data.status && response.data.status?.message) {
+                message = response.data.status.message;
+            }
+
+            toast.error(message);
+        } finally {
+            setIsFetching(false);
+        }
     };
+
+    const handleCloseDialog = (ev, reason) => {
+        if (!onClose || typeof onClose !== 'function') return;
+
+        if (reason !== 'backdropClick' && reason !== 'escapeKeyDown') {
+            onClose()
+        }
+    }
 
     const valueOnChange = ({ target }) => {
         setNewTask(prev => ({ ...prev, [target.name]: target.value }));
     }
 
+    const dueDateOnChange = (date) => {
+        setNewTask(prev => ({ ...prev, dueDate: date }));
+    }
+
     return (
         <Dialog
             open={open}
-            onClose={onClose}
+            onClose={handleCloseDialog}
             className={classes.modal}
             PaperProps={{
                 style: {
@@ -118,11 +159,12 @@ const TaskModal = ({ open, onClose }) => {
                         <FormControl fullWidth margin="normal">
                             <InputLabel>Status</InputLabel>
                             <Select
-                                value={newTask.status || 'To Do'}
+                                value={newTask.status}
                                 onChange={valueOnChange}
                                 label="Status"
                                 name="status"
                             >
+                                <MenuItem value=""><em>None</em></MenuItem>
                                 <MenuItem value="To Do">To Do</MenuItem>
                                 <MenuItem value="In Progress">In Progress</MenuItem>
                                 <MenuItem value="Done">Done</MenuItem>
@@ -140,9 +182,9 @@ const TaskModal = ({ open, onClose }) => {
                                     <LocalizationProvider dateAdapter={AdapterDateFns}>
                                         <DatePicker
                                             label="Due Date"
-                                            value={dueDate}
+                                            value={newTask.dueDate}
                                             {...field}
-                                            onChange={valueOnChange}
+                                            onChange={dueDateOnChange}
                                             renderInput={(params) => <TextField {...params} fullWidth />}
                                         />
                                     </LocalizationProvider>
@@ -164,6 +206,7 @@ const TaskModal = ({ open, onClose }) => {
                         fullWidth
                         className={classes.button}
                         onClick={onClose}
+                        disabled={fetching}
                     >
                         Cancel
                     </Button>
@@ -174,8 +217,9 @@ const TaskModal = ({ open, onClose }) => {
                         fullWidth
                         className={classes.button}
                         onClick={handleSubmit(addTask)}
+                        disabled={fetching}
                     >
-                        Add Task
+                        {fetching ? <CircularProgress size={20} /> : 'Add Task'}
                     </Button>
                 </Box>
             </DialogActions>

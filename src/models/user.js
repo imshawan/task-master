@@ -24,6 +24,14 @@ const userSchema = new Schema({
         type: Date,
         default: () => new Date().toISOString(),
     },
+    completedTasks: {
+        type: Number,
+        default: 0,
+    },
+    totalTasks: {
+        type: Number,
+        default: 0,
+    }
 });
 
 // Create model and export

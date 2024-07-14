@@ -3,7 +3,7 @@ const {User} = require('../models');
 const utilities = require('../utilities');
 
 const user = module.exports;
-const validuserFields = ['_id', 'username', 'fullname', 'email', 'joinedAt'];
+const validuserFields = ['_id', 'username', 'fullname', 'email', 'joinedAt', 'completedTasksCount', 'totalTasks'];
 
 user.register = async function (req, res) {
     const {username, email, password, fullname} = req.body;

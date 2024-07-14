@@ -10,5 +10,15 @@ module.exports = {
     signin: [
         body('username').notEmpty().withMessage('Username/email id is required'),
         body('password').notEmpty().withMessage('Password is required'),
-    ]
+    ],
+    task: [
+        body('title').isString().trim().notEmpty().withMessage('Title is required'),
+        body('description').isString().trim().optional(),
+        body('status')
+          .isString()
+          .trim()
+          .isIn(['To Do', 'In Progress', 'Done', 'Discarded'])
+          .withMessage('Invalid status value'),
+        body('dueDate').optional().isISO8601().toDate().withMessage('Invalid due date'),
+      ]
 };
