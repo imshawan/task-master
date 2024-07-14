@@ -94,10 +94,10 @@ const useStyles = makeStyles()((theme) => ({
         marginBottom: theme.spacing(4),
     },
     speedDial: {
-        position: "absolute",
+        position: "fixed",
         "&.MuiSpeedDial-directionUp, &.MuiSpeedDial-directionLeft": {
-          bottom: theme.spacing(2),
-          right: theme.spacing(2)
+          bottom: theme.spacing(4),
+          right: theme.spacing(4)
         },
         "&.MuiSpeedDial-directionDown, &.MuiSpeedDial-directionRight": {
           top: theme.spacing(2),
@@ -164,7 +164,7 @@ const TaskList = () => {
             <TaskModal open={openModal} onClose={() => setOpenModal(false)} />
             <Box className={classes.root}>
                 <Container maxWidth="md" className={classes.container}>
-                    <div className={classes.logoContainer}>
+                    {/* <div className={classes.logoContainer}>
                         <TaskAltIcon className={classes.logo} />
                         <Typography component="h1" variant="h3" fontWeight="bold" color="primary">
                             TaskMaster
@@ -172,7 +172,7 @@ const TaskList = () => {
                     </div>
                     <Typography variant="h5" color="textSecondary" gutterBottom>
                         Manage Your Tasks Effortlessly
-                    </Typography>
+                    </Typography> */}
                     <Grid container spacing={2} className={classes.filterContainer}>
                             <Grid item xs={12} sm={8}>
                                 <TextField

@@ -30,7 +30,7 @@ const pages = [
 
 const useStyles = makeStyles()((theme) => ({
     appBar: {
-        position: 'static',
+        position: 'sticky',
     },
     taskIconDesktop: {
         display: 'none',

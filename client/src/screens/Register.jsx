@@ -43,24 +43,24 @@ const useStyles = makeStyles()((theme) => ({
             backgroundColor: 'rgba(63, 81, 181, 0.7)', // primary color with opacity
         },
     },
-    imageContent: {
-        position: 'relative',
-        zIndex: 1,
-        color: theme.palette.common.white,
-        padding: theme.spacing(4),
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        height: '100%',
-    },
     paper: {
-        margin: theme.spacing(8, 4),
+        margin: theme.spacing(0, 4),
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
         height: '100%',
         justifyContent: 'center',
     },
+    imageContent: {
+        position: 'relative',
+        zIndex: 1,
+        color: theme.palette.common.white,
+        padding: theme.spacing(0, 4, 0, 4),
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        height: '100%',
+      },
     logoContainer: {
         display: 'flex',
         alignItems: 'center',
@@ -94,7 +94,7 @@ const useStyles = makeStyles()((theme) => ({
         },
     },
     formItems: {
-        marginBottom: theme.spacing(2)
+        marginBottom: theme.spacing(1)
     }
 }));
 
