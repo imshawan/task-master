@@ -5,6 +5,7 @@ const middlewares = module.exports;
 
 middlewares.authentication = require('./authentication');
 middlewares.validators = require('./validators');
+middlewares.cors = require('./cors');
 
 middlewares.validateFields = (req, res, next) => {
     const errors = validationResult(req);
