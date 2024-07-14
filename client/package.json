@@ -1,5 +1,5 @@
 {
-  "name": "task-manager-client",
+  "name": "task-master-client",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
