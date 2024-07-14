@@ -121,6 +121,10 @@ taskApi.remove = async function(req) {
     await Task.findByIdAndDelete(id);
     await handleUserCounters(user._id, 'tasksCount', -1);
 
+    if (task.status == 'Done') {
+        await handleUserCounters(user._id, 'completedTasksCount', -1);
+    }
+
     return {
         message: 'The task has been deleted successfully'
     }
