@@ -27,7 +27,6 @@ auth.jwtOptions = {
  */
 auth.validate = async function (req, res, next) {
     passport.authenticate('jwt', { session: false }, async function (err, userData, info) {
-        console.log('err', info);
         if (err || !userData) {
             let message = err ? (err.message || err) : (info && info.message ? info.message : 'Unauthorized');
             return utilities.response.format(401, res, {message});

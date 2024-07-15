@@ -136,7 +136,6 @@ describe('Testing TaskMaster\'s API Endpoints', () => {
                     status: 'Invalid Status',
                 })
                 .end((err, res) => {
-                    console.log(res.body.response);
                     expect(res).to.have.status(400);
                     expect(res.body).to.be.an('object');
 

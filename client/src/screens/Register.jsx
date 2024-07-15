@@ -160,7 +160,6 @@ const Register = () => {
     const handleChange = ({ target }) => {
         setUserData(prev => ({ ...prev, [target.name]: target.value }));
     }
-    console.log(showPassword)
 
     return (
         <Grid container component="main" className={classes.root}>
