@@ -16,7 +16,7 @@ import { toast } from 'react-toastify';
 import NavBar from '../components/NavBar';
 import TextField from '../components/TextField';
 import Button from '../components/Button';
-import { endpoints, httpClient as http, parseParams } from '../utilities';
+import { endpoints,  parseParams } from '../utilities';
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -118,7 +118,7 @@ const Profile = () => {
         setIsFetching(true);
 
         try {
-            let { data } = await http.put(endpoints.UPDATE_PROFILE, formData);
+            let { data } = await window.axiosInstance.put(endpoints.UPDATE_PROFILE, formData);
             if (data && data.response && data.response.message) {
                 toast.success(data.response.message);
                 

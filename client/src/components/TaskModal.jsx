@@ -12,7 +12,7 @@ import { Controller, useForm } from "react-hook-form";
 import { z as zod } from "zod";
 import { toast } from 'react-toastify';
 import TextField from './TextField';
-import { endpoints, httpClient as http } from '../utilities';
+import { endpoints,  } from '../utilities';
 
 const useStyles = makeStyles()((theme) => ({
     modal: {
@@ -61,7 +61,7 @@ const TaskModal = ({ open, onClose, onCreate }) => {
         let formData = {...values, dueDate: new Date(newTask.dueDate).toISOString(), status: newTask.status};
 
         try {
-            let { data } = await http.post(endpoints.CREATE_TASK, formData);
+            let { data } = await window.axiosInstance.post(endpoints.CREATE_TASK, formData);
             if (data && data.response && data.response.message) {
                 toast.success(data.response.message);
 

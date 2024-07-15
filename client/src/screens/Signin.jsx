@@ -15,7 +15,7 @@ import { useNavigate } from 'react-router-dom';
 
 import TextField from '../components/TextField';
 import Button from '../components/Button';
-import { endpoints, httpClient as http } from '../utilities';
+import { endpoints,  } from '../utilities';
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -120,7 +120,7 @@ const SignIn = () => {
         setIsFetching(true);
 
         try {
-            let {data} = await http.post(endpoints.SIGN_IN, formData);
+            let {data} = await window.axiosInstance.post(endpoints.SIGN_IN, formData);
             if (data && data.response) {
                 let {token, user} = data.response;
                 if (token) {

@@ -10,8 +10,10 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'react-toastify';
 import TaskModal from '../components/TaskModal';
 import NavBar from '../components/NavBar';
-import { endpoints, httpClient as http, parseParams } from '../utilities';
+import { endpoints,  parseParams } from '../utilities';
 import TaskCard from '../components/TaskCard';
+import NoTasks from '../components/NoTasks';
+import Loading from '../components/Loading';
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -156,7 +158,7 @@ const TaskList = () => {
         }
 
         try {
-            const {data} = await http.get(parseParams(endpoints.GET_TASKS, {query: query.toString()}));
+            const {data} = await window.axiosInstance.get(parseParams(endpoints.GET_TASKS, {query: query.toString()}));
             if (data && data.response && data.response.tasks) {
                 setPagination({page, limit, nextPage: data.response.nextPage, currentPage: data.response.currentPage, totalPages: data.response.totalPages});
                 return data.response.tasks; 
@@ -250,7 +252,7 @@ const TaskList = () => {
             
                     <Box className={classes.tasks}>
                         <AnimatePresence>
-                            {tasks.map((task) => (
+                            {tasks.length ? tasks.map((task) => (
                                 <MotionCard
                                     key={task._id}
                                     className={classes.taskCard}
@@ -258,10 +260,10 @@ const TaskList = () => {
                                     animate={{ opacity: 1, y: 0 }}
                                     exit={{ opacity: 0, y: -20 }}
                                     transition={{ duration: 0.3 }}
-                                >
+                                >   
                                     <TaskCard task={task} onDatachange={onTaskUpdate} onRemove={onTaskRemove} />
                                 </MotionCard>
-                            ))}
+                            )) : (loading ? <Loading /> : <NoTasks onAddTask={() => setOpenModal(true)} />)}
                         </AnimatePresence>
                     </Box>
                 </Container>

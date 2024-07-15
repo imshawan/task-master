@@ -10,7 +10,7 @@ import Sweetalert from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 
 import { calculateDueDate } from "../utilities";
-import { endpoints, httpClient as http, parseParams } from '../utilities';
+import { endpoints, parseParams } from '../utilities';
 
 const useStyles = makeStyles()((theme) => ({
     chip: {
@@ -48,7 +48,7 @@ export default function TaskCard({ task, onDatachange, onRemove }) {
         setStatus(val);
 
         try {
-            let { data } = await http.put(parseParams(endpoints.UPDATE_TASK, {id}), {status: val});
+            let { data } = await window.axiosInstance.put(parseParams(endpoints.UPDATE_TASK, {id}), {status: val});
             if (data && data.response && data.response.message) {
                 toast.success(data.response.message);
             }
@@ -82,7 +82,7 @@ export default function TaskCard({ task, onDatachange, onRemove }) {
                 }
         
                 try {
-                    let { data } = await http.delete(parseParams(endpoints.DELETE_TASK, {id}));
+                    let { data } = await window.axiosInstance.delete(parseParams(endpoints.DELETE_TASK, {id}));
                     if (data && data.response && data.response.message) {
                         toast.success(data.response.message);
                     }
