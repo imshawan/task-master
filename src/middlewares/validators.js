@@ -23,12 +23,13 @@ module.exports = {
     ],
     task: [
         body('title').isString().trim().notEmpty().withMessage('Title is required'),
-        body('description').isString().trim().optional(),
+        body('description').notEmpty().isString().trim().optional(),
         body('status')
+            .notEmpty()
             .isString()
             .trim()
             .isIn(['To Do', 'In Progress', 'Done', 'Discarded'])
             .withMessage('Invalid status value'),
-        body('dueDate').optional().isISO8601().toDate().withMessage('Invalid due date'),
+        body('dueDate').notEmpty().isISO8601().toDate().withMessage('Invalid due date'),
     ]
 };

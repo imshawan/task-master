@@ -12,10 +12,13 @@
     "private": true,
     "scripts": {
         "start": "node index.js",
-        "dev": "nodemon"
+        "dev": "nodemon",
+        "test": "npx mocha test/api.spec.js --timeout=15000"
     },
     "dependencies": {
         "bcryptjs": "^2.4.3",
+        "chai": "^4.4.1",
+        "chai-http": "^4.4.0",
         "cookie-parser": "~1.4.4",
         "cors": "^2.8.5",
         "dotenv": "^16.4.5",
@@ -26,6 +29,7 @@
         "jade": "~1.11.0",
         "jsonwebtoken": "^9.0.2",
         "lodash": "^4.17.21",
+        "mocha": "^10.6.0",
         "mongoose": "^8.5.1",
         "morgan": "~1.9.1",
         "passport": "^0.7.0",
