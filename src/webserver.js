@@ -27,9 +27,6 @@ module.exports.initialize = async function () {
         next(createError(404));
     });
 
-    // error handler
-    app.use(middlewares.handleErrors);
-
     return app;
 };
 
@@ -43,7 +40,7 @@ async function initializeExpressServer(app) {
     app.set('views', path.join(__dirname, 'views'));
     app.set('view engine', 'jade');
 
-    app.use(logger('dev'));
+    app.use(logger('dev',  {stream: middlewares.logger.morganStream}));
     app.use(express.json({ limit: '1mb' }));
     app.use(express.urlencoded({ extended: true, limit: '1mb' }));
     app.use(cookieParser());
@@ -52,6 +49,19 @@ async function initializeExpressServer(app) {
         limit: 100, // Limit each IP to 100 requests per `window`
         standardHeaders: 'draft-7',
     }));
+
+    // error handler
+    app.use((err, req, res, next) => {
+        middlewares.logger.error(`Error: ${err.message}`, err);
+
+        // set locals, only providing error in development
+        res.locals.message = err.message;
+        res.locals.error = req.app.get('env') === 'development' ? err : {};
+    
+        // render the error page
+        res.status(err.status || 500);
+        res.render('error');
+    });
 
     passport.use(middlewares.authentication.JwtStrategy);
     app.use(passport.initialize());
