@@ -19,7 +19,7 @@ TaskMaster is a task management application built with Node.js, Express, MongoDB
 - **Responsive Design**: The application is fully responsive and works well on all devices.
 
 ### Security
-- Implemented basic security measures to protect the application from common vulnerabilities.
+- Implemented basic security measures such as Input validations, Authorization, CORS, Logging and Rate limiting to protect the application from common vulnerabilities.
 - Server-side validation to ensure that task data is valid before saving it to the database.
 
 ## Components
@@ -55,19 +55,18 @@ Displays user information, avatar, brief statistics of their tasks and allows us
 
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/imshawan/taskmaster.git
-   cd taskmaster
+   git clone https://github.com/imshawan/task-master.git
    ```
 
 2. **Install server dependencies:**
    ```bash
-   cd server
+   cd task-master
    npm install
    ```
 
 3. **Install client dependencies:**
    ```bash
-   cd ../client
+   cd ./client
    npm install
    ```
 
@@ -84,7 +83,7 @@ Displays user information, avatar, brief statistics of their tasks and allows us
    REACT_APP_HOST=http://localhost:3001
    ```
 
-5. **Start the server:**
+5. **Start the server: (in dir: task-master)**
    ```bash
    npm start
    ```
@@ -94,15 +93,6 @@ Displays user information, avatar, brief statistics of their tasks and allows us
    cd ./client
    npm start
    ```
-
-## Usage
-
-- **Creating a Task**: Navigate to the task creation form, fill in the required fields, and submit.
-- **Updating a Task**: Click on a task from the task list to update its details or status.
-- **Deleting a Task**: Click on the delete button next to a task to remove it.
-- **Filtering Tasks**: Use the dropdown to filter tasks by their status.
-- **Sorting and Searching Tasks**: Use the provided options to sort and search tasks.
-
 
 ## License
 
