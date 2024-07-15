@@ -3,7 +3,7 @@ const {User} = require('../models');
 const utilities = require('../utilities');
 
 const user = module.exports;
-const validuserFields = ['_id', 'username', 'fullname', 'email', 'joinedAt', 'completedTasksCount', 'totalTasks'];
+const validuserFields = ['_id', 'username', 'fullname', 'email', 'joinedAt', 'completedTasks', 'totalTasks'];
 
 user.register = async function (req, res) {
     const {username, email, password, fullname} = req.body;
@@ -26,7 +26,14 @@ user.register = async function (req, res) {
 }
 
 user.get = async function (req) {
-    return await User.findById(req.user._id, validuserFields);
+    let user = await User.findById(req.user._id, validuserFields);
+    let {completedTasks, totalTasks} = user;
+    
+    user.completedTasks = completedTasks || 0;
+    user.totalTasks = totalTasks ||  0;
+    user.completionRate = totalTasks > 0 ? (completedTasks / totalTasks) * 100 : 0;
+
+    return user
 }
 
 // As of now, let's only allow the users to update their full name

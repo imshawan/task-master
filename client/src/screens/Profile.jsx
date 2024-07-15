@@ -16,7 +16,8 @@ import { toast } from 'react-toastify';
 import NavBar from '../components/NavBar';
 import TextField from '../components/TextField';
 import Button from '../components/Button';
-import { endpoints,  parseParams } from '../utilities';
+import { endpoints } from '../utilities';
+import Loading from '../components/Loading';
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -32,6 +33,13 @@ const useStyles = makeStyles()((theme) => ({
         borderRadius: theme.shape.borderRadius * 2,
         padding: theme.spacing(4),
         boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
+        minHeight: '613px'
+    },
+    loaderContainer: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        minHeight: '500px',
     },
     header: {
         marginBottom: theme.spacing(4),
@@ -83,7 +91,7 @@ const MotionContainer = motion(Container);
 const MotionPaper = motion(Paper);
 
 const Profile = () => {
-    const initialValues = { fullname: '', email: '', totalTasks: 10, completedTasks: 1, completionRate: 10 }
+    const initialValues = { fullname: '', email: '', totalTasks: 0, completedTasks: 0, completionRate: 0 }
     const { classes } = useStyles();
     const theme = useTheme();
 
@@ -91,6 +99,7 @@ const Profile = () => {
     const [fullname, setFullname] = useState('');
     const [initials, setInitials] = useState('');
     const [fetching, setIsFetching] = useState(false);
+    const [profileLoading, setProfileLoading] = useState(true);
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
     const schema = zod.object({
@@ -138,19 +147,6 @@ const Profile = () => {
     };
 
     useEffect(() => {
-        let data = JSON.parse(localStorage.getItem('user')) || {};
-        let { completedTasks, totalTasks, completionRate } = initialValues;
-
-        if (!data.completionRate) data.completionRate = completionRate;
-        if (!data.totalTasks) data.totalTasks = totalTasks;
-        if (!data.completedTasks) data.completedTasks = completedTasks;
-
-        setInitials(getInitials(data.fullname));
-        setFullname(data.fullname)
-        setUser(data);
-    }, []);
-
-    useEffect(() => {
         setInitials(getInitials(user.fullname));
     }, [fullname]);
 
@@ -159,6 +155,33 @@ const Profile = () => {
         reset({ fullname });
         
     }, [fullname, reset]);
+
+    useEffect(() => {
+        async function loadProfile() {
+
+            try {
+                let { data } = await window.axiosInstance.get(endpoints.GET_PROFILE);
+                if (data && data.response && data.response) {
+                    let {response} = data;
+                    setUser(response)
+                    setInitials(getInitials(response.fullname));
+                    setFullname(response.fullname)
+                }
+    
+            } catch ({ message, response }) {
+    
+                if (response && response.data.status && response.data.status?.message) {
+                    message = response.data.status.message;
+                }
+    
+                toast.error(message);
+            } finally {
+                setTimeout(() => setProfileLoading(false), 500);
+            }
+        }
+
+        loadProfile()
+    }, []);
 
     return (
         <React.Fragment>
@@ -171,111 +194,114 @@ const Profile = () => {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.5 }}
                     >
-                        <Grid container className={classes.header}>
-                            <Grid item display={'flex'} justifyContent={'center'} xs={12} sm={1.7}>
-                                <Avatar className={classes.avatar}>
-                                    {initials}
-                                </Avatar>
-                            </Grid>
-                            <Grid item xs={12} sm={10} textAlign={isMobile ? 'center' : 'left'}>
-                                <Typography variant="h4">
-                                    {fullname}
-                                </Typography>
-                                <Typography variant="subtitle1" color="textSecondary">
-                                    {user.email}
-                                </Typography>
-                                {user.joinedAt && <Typography variant="subtitle1" color="textSecondary">
-                                    Member since {formatDate(user.joinedAt)}
-                                </Typography>}
-                            </Grid>
-                        </Grid>
-                        <Grid container spacing={3} style={{ marginBottom: theme.spacing(4) }}>
-                            <Grid item xs={12} sm={4}>
-                                <MotionPaper
-                                    className={classes.statsPaper}
-                                    whileHover={{ scale: 1.05 }}
-                                >
-                                    <AssignmentIcon className={classes.statsIcon} />
-                                    <Typography variant="h6">{user.totalTasks}</Typography>
-                                    <Typography variant="body2">Total Tasks</Typography>
-                                </MotionPaper>
-                            </Grid>
-                            <Grid item xs={12} sm={4}>
-                                <MotionPaper
-                                    className={classes.statsPaper}
-                                    whileHover={{ scale: 1.05 }}
-                                >
-                                    <CheckCircleIcon className={classes.statsIcon} />
-                                    <Typography variant="h6">{user.completedTasks}</Typography>
-                                    <Typography variant="body2">Completed Tasks</Typography>
-                                </MotionPaper>
-                            </Grid>
-                            <Grid item xs={12} sm={4}>
-                                <MotionPaper
-                                    className={classes.statsPaper}
-                                    whileHover={{ scale: 1.05 }}
-                                >
-                                    <TrendingUpIcon className={classes.statsIcon} />
-                                    <Typography variant="h6">{user.completionRate}%</Typography>
-                                    <Typography variant="body2">Completion Rate</Typography>
-                                    <LinearProgress
-                                        variant="determinate"
-                                        value={user.completionRate}
-                                        className={classes.progressBar}
-                                    />
-                                </MotionPaper>
-                            </Grid>
-                        </Grid>
-                        <Divider className={classes.divider} />
-                        <Typography variant="h6" gutterBottom>
-                            Account information
-                        </Typography>
-                        <form onSubmit={handleSubmit} className={classes.form}>
-                            <Grid container spacing={3}>
-                                <Grid item xs={12} sm={6}>
-                                    <Controller
-                                        control={control}
-                                        name="fullname"
-                                        render={({ field }) => (<TextField
-                                            field="fullname"
-                                            label="Name"
-                                            fullWidth
-                                            onChange={({ target }) => setFullname(target.value)}
-                                            value={fullname}
-                                            variant="outlined"
-                                            errors={errors}
-                                            {...field}
-                                        />)}
-                                    />
-
+                        {!profileLoading ? <Box>
+                            <Grid container className={classes.header}>
+                                <Grid item display={'flex'} justifyContent={'center'} xs={12} sm={1.7}>
+                                    <Avatar className={classes.avatar}>
+                                        {initials}
+                                    </Avatar>
                                 </Grid>
-                                <Grid item xs={12} sm={6}>
-                                    <TextField
-                                        fullWidth
-                                        label="Email"
-                                        name="email"
-                                        value={user.email}
-                                        disabled
-                                        variant="outlined"
-                                        type="email"
-                                    />
+                                <Grid item xs={12} sm={10} textAlign={isMobile ? 'center' : 'left'}>
+                                    <Typography variant="h4">
+                                        {fullname}
+                                    </Typography>
+                                    <Typography variant="subtitle1" color="textSecondary">
+                                        {user.email}
+                                    </Typography>
+                                    {user.joinedAt && <Typography variant="subtitle1" color="textSecondary">
+                                        Member since {formatDate(user.joinedAt)}
+                                    </Typography>}
+                                </Grid>
+                            </Grid>
+                            <Grid container spacing={3} style={{ marginBottom: theme.spacing(4) }}>
+                                <Grid item xs={12} sm={4}>
+                                    <MotionPaper
+                                        className={classes.statsPaper}
+                                        whileHover={{ scale: 1.05 }}
+                                    >
+                                        <AssignmentIcon className={classes.statsIcon} />
+                                        <Typography variant="h6">{user.totalTasks}</Typography>
+                                        <Typography variant="body2">Total Tasks</Typography>
+                                    </MotionPaper>
+                                </Grid>
+                                <Grid item xs={12} sm={4}>
+                                    <MotionPaper
+                                        className={classes.statsPaper}
+                                        whileHover={{ scale: 1.05 }}
+                                    >
+                                        <CheckCircleIcon className={classes.statsIcon} />
+                                        <Typography variant="h6">{user.completedTasks}</Typography>
+                                        <Typography variant="body2">Completed Tasks</Typography>
+                                    </MotionPaper>
+                                </Grid>
+                                <Grid item xs={12} sm={4}>
+                                    <MotionPaper
+                                        className={classes.statsPaper}
+                                        whileHover={{ scale: 1.05 }}
+                                    >
+                                        <TrendingUpIcon className={classes.statsIcon} />
+                                        <Typography variant="h6">{user.completionRate || 0}%</Typography>
+                                        <Typography variant="body2">Completion Rate</Typography>
+                                        <LinearProgress
+                                            variant="determinate"
+                                            value={user.completionRate || 0}
+                                            className={classes.progressBar}
+                                        />
+                                    </MotionPaper>
                                 </Grid>
                             </Grid>
                             <Divider className={classes.divider} />
-                            <Box className={classes.actionBtnArea}>
-                                <Button
-                                    variant="contained"
-                                    color="primary"
-                                    size="large"
-                                    startIcon={<SaveIcon />}
-                                    className={classes.saveButton}
-                                    onClick={handleSubmit(onSubmit)}
-                                    disabled={fetching}
-                                >
-                                    {fetching ? <CircularProgress size={26} /> : 'Save Changes'}
-                                </Button>
-                            </Box>
-                        </form>
+                            <Typography variant="h6" gutterBottom>
+                                Account information
+                            </Typography>
+                            <form onSubmit={handleSubmit} className={classes.form}>
+                                <Grid container spacing={3}>
+                                    <Grid item xs={12} sm={6}>
+                                        <Controller
+                                            control={control}
+                                            name="fullname"
+                                            render={({ field }) => (<TextField
+                                                field="fullname"
+                                                label="Name"
+                                                fullWidth
+                                                onChange={({ target }) => setFullname(target.value)}
+                                                value={fullname}
+                                                variant="outlined"
+                                                errors={errors}
+                                                {...field}
+                                            />)}
+                                        />
+                                    </Grid>
+                                    <Grid item xs={12} sm={6}>
+                                        <TextField
+                                            fullWidth
+                                            label="Email"
+                                            name="email"
+                                            value={user.email}
+                                            disabled
+                                            variant="outlined"
+                                            type="email"
+                                        />
+                                    </Grid>
+                                </Grid>
+                                <Divider className={classes.divider} />
+                                <Box className={classes.actionBtnArea}>
+                                    <Button
+                                        variant="contained"
+                                        color="primary"
+                                        size="large"
+                                        startIcon={<SaveIcon />}
+                                        className={classes.saveButton}
+                                        onClick={handleSubmit(onSubmit)}
+                                        disabled={fetching}
+                                    >
+                                        {fetching ? <CircularProgress size={26} /> : 'Save Changes'}
+                                    </Button>
+                                </Box>
+                            </form>
+                        </Box> : <Box className={classes.loaderContainer}>
+                            <Loading title={"Loading your profile"} />
+                        </Box>}
                     </MotionContainer>
                 </Container>
             </Box>

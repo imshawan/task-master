@@ -31,7 +31,11 @@ const userSchema = new Schema({
     totalTasks: {
         type: Number,
         default: 0,
-    }
+    },
+    completionRate: {
+        type: Number,
+        default: 0,
+    },
 });
 
 // Create model and export

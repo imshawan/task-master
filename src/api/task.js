@@ -50,6 +50,7 @@ taskApi.create = async function (req) {
     });
 
     await task.save();
+    await handleUserCounters(user._id, 'totalTasks', 1); // Increment the total tasks for user on creation of a new tassk
 
     return {
         message: 'Task created successfully',
@@ -102,7 +103,7 @@ taskApi.update = async function (req) {
     // If the counter has been changed (i.e., status has transitioned to or from 'Done'),
     // update the user's completed tasks count.
     if (counter !== 0) {
-        await handleUserCounters(user._id, 'completedTasksCount', counter);
+        await handleUserCounters(user._id, 'completedTasks', counter);
     }
 
 
@@ -128,10 +129,10 @@ taskApi.remove = async function (req) {
     }
 
     await Task.findByIdAndDelete(id);
-    await handleUserCounters(user._id, 'tasksCount', -1); // Decrement the total tasks count for the user as the task is deleted
+    await handleUserCounters(user._id, 'totalTasks', -1); // Decrement the total tasks count for the user as the task is deleted
 
     if (task.status == 'Done') {
-        await handleUserCounters(user._id, 'completedTasksCount', -1); // Also decrement the completed task count
+        await handleUserCounters(user._id, 'completedTasks', -1); // Also decrement the completed task count
     }
 
     return {
@@ -141,6 +142,7 @@ taskApi.remove = async function (req) {
 
 
 async function handleUserCounters(userId, field, value) {
+    console.log('userId', userId, field, value);
     await User.findByIdAndUpdate(
         userId,
         { $inc: { [field]: value } },

@@ -202,15 +202,6 @@ const TaskList = () => {
             <TaskModal open={openModal} onClose={() => setOpenModal(false)} onCreate={addTask} />
             <Box className={classes.root}>
                 <Container maxWidth="md" className={classes.container}>
-                    {/* <div className={classes.logoContainer}>
-                        <TaskAltIcon className={classes.logo} />
-                        <Typography component="h1" variant="h3" fontWeight="bold" color="primary">
-                            TaskMaster
-                        </Typography>
-                    </div>
-                    <Typography variant="h5" color="textSecondary" gutterBottom>
-                        Manage Your Tasks Effortlessly
-                    </Typography> */}
                     <Grid container spacing={2} className={classes.filterContainer}>
                             <Grid item xs={12} sm={8}>
                                 <TextField
@@ -263,7 +254,7 @@ const TaskList = () => {
                                 >   
                                     <TaskCard task={task} onDatachange={onTaskUpdate} onRemove={onTaskRemove} />
                                 </MotionCard>
-                            )) : (loading ? <Loading /> : <NoTasks onAddTask={() => setOpenModal(true)} />)}
+                            )) : (loading ? <Loading title={'Loading Your Tasks'} /> : <NoTasks onAddTask={() => setOpenModal(true)} />)}
                         </AnimatePresence>
                     </Box>
                 </Container>

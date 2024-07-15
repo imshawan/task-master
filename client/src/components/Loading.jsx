@@ -22,7 +22,7 @@ const useStyles = makeStyles()((theme) => ({
 }));
 
 
-const Loading = () => {
+const Loading = ({title}) => {
     const { classes } = useStyles();
 
     return (
@@ -33,10 +33,10 @@ const Loading = () => {
                 className={classes.progress}
             />
             <Typography variant="h6" gutterBottom>
-                Loading Your Tasks
+                {title}
             </Typography>
             <Typography variant="body2" className={classes.loadingText}>
-                Just a moment while we fetch your tasks...
+                Just a moment while we fetch your content...
             </Typography>
         </Box>
     );
