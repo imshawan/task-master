@@ -29,6 +29,7 @@ user.get = async function (req) {
     return await User.findById(req.user._id, validuserFields);
 }
 
+// As of now, let's only allow the users to update their full name
 user.update = async function (req) {
     const {fullname} = req.body;
     if (!fullname) return;

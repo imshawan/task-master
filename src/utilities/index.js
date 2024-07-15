@@ -12,6 +12,14 @@ utils.isValidEmail = function (email) {
     return Boolean(isValid && isValid.length);
 };
 
+/**
+ * Filters an object to include only specified fields.
+ * 
+ * @param {Object} obj - The object to filter.
+ * @param {Array<string>} fields - The array of field names to retain in the filtered object.
+ * 
+ * @returns {Object} The filtered object containing only the specified fields. If the specified fields are not present, they will be set to `null`.
+ */
 utils.filterObject = function (obj, fields) {
     if (!Object.keys(obj).length) return obj;
     if(!fields || !Array.isArray(fields) || !fields.length) return obj;

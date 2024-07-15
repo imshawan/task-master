@@ -1,5 +1,15 @@
 const { body } = require('express-validator');
 
+/**
+ * @file This file contains validation rules for user registration, sign-in, task creation and etc.
+ * using the express-validator library.
+ * 
+ * The validation rules ensure that the required fields are provided and adhere to the specified formats
+ * before proceeding with further request handling.
+ * 
+ * @module validators
+ */
+
 module.exports = {
     regsteration: [
         body('username').isLength({ min: 5 }).withMessage('Username must be at least 5 characters long'),
@@ -15,10 +25,10 @@ module.exports = {
         body('title').isString().trim().notEmpty().withMessage('Title is required'),
         body('description').isString().trim().optional(),
         body('status')
-          .isString()
-          .trim()
-          .isIn(['To Do', 'In Progress', 'Done', 'Discarded'])
-          .withMessage('Invalid status value'),
+            .isString()
+            .trim()
+            .isIn(['To Do', 'In Progress', 'Done', 'Discarded'])
+            .withMessage('Invalid status value'),
         body('dueDate').optional().isISO8601().toDate().withMessage('Invalid due date'),
-      ]
+    ]
 };

@@ -13,9 +13,12 @@ const router = require('./routes/index');
 module.exports.initialize = async function () {
     const app = express();
 
+    // Let the database connection establish first before even the server starts so that if the connection fails, the server stops.
+    // Continuing with a failed DB connection does not make sense.
     await database.initializeConnection();
     await initializeExpressServer(app);
 
+    // Mounting the base API router
     app.use('/', router);
 
     // catch 404 and forward to error handler

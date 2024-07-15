@@ -15,6 +15,15 @@ auth.jwtOptions = {
     secretOrKey: jwtSecret
 };
 
+/**
+ * Middleware to validate a JWT token using Passport.
+ * 
+ * @param {Object} req - The request object.
+ * @param {Object} res - The response object.
+ * @param {Function} next - The next middleware function.
+ * 
+ * @returns {void}
+ */
 auth.validate = async function (req, res, next) {
     passport.authenticate('jwt', { session: false }, async function (err, userData, info) {
         if (err || !userData) {
@@ -22,6 +31,7 @@ auth.validate = async function (req, res, next) {
             return utilities.response.format(401, res, {message});
         }
         
+        // Add the user data to the request object after a successful authentication
         req.user = userData;
 
         next();
@@ -29,6 +39,14 @@ auth.validate = async function (req, res, next) {
     })(req, res, next);
 }
 
+/**
+ * JWT strategy for Passport to authenticate users based on a JWT token.
+ * 
+ * @param {Object} payload - The JWT payload containing user data.
+ * @param {Function} done - The callback function to call once the user is authenticated.
+ * 
+ * @returns {void}
+ */
 auth.JwtStrategy = new JwtStrategy(this.jwtOptions, async (payload, done) => {
     try {
         const user = await User.findById(payload.id, validuserFields);
