@@ -4,6 +4,7 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const passport = require('passport');
+const {rateLimit} = require('express-rate-limit');
 
 const middlewares = require('./middlewares');
 const database = require('./database');
@@ -46,6 +47,11 @@ async function initializeExpressServer(app) {
     app.use(express.json({ limit: '1mb' }));
     app.use(express.urlencoded({ extended: true, limit: '1mb' }));
     app.use(cookieParser());
+    app.use(rateLimit({
+        windowMs: 10 * 60 * 1000, // 10 minutes
+        limit: 100, // Limit each IP to 100 requests per `window`
+        standardHeaders: 'draft-7',
+    }));
 
     passport.use(middlewares.authentication.JwtStrategy);
     app.use(passport.initialize());
