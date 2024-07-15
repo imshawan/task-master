@@ -1,6 +1,20 @@
 export * from './constants';
 export * from './http';
 
+/**
+ * Replaces placeholders in an endpoint string with corresponding values from the params object.
+ * 
+ * @param {string} endpoint - The endpoint string containing placeholders in the form of {{placeholder}}.
+ * @param {Object} params - An object containing values to replace the placeholders.
+ * 
+ * @returns {string} The endpoint string with placeholders replaced by corresponding values from the params object.
+ * 
+ * @example
+ * // Replaces the placeholder {{id}} with the value 123 in the endpoint string
+ * const result = parseParams('/api/task/{{id}}', { id: 123 });
+ * console.log(result); // Outputs: '/api/task/123'
+ * 
+ */
 export const parseParams = (endpoint, params) => {
     if (!endpoint || !params) {
         return endpoint;
