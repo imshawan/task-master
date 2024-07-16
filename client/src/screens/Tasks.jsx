@@ -252,6 +252,7 @@ const TaskList = () => {
                                         <MenuItem value="To Do">To Do</MenuItem>
                                         <MenuItem value="In Progress">In Progress</MenuItem>
                                         <MenuItem value="Done">Done</MenuItem>
+                                        <MenuItem value="Discarded">Discarded</MenuItem>
                                     </Select>
                                 </FormControl>
                             </Grid>
