@@ -15,11 +15,11 @@ TaskMaster is a task management application built with Node.js, Express, MongoDB
 ### Additional Features
 - **User Authentication and Authorization**: Secure access to the application with user authentication. Only authorized users can access and manage their tasks.
 - **Task Due Dates**: Ability to set due dates for tasks and track them on the go.
-- **User Profiles**: Users can have profiles with avatars.
+- **User Profiles**: Users can have profiles with avatars. It also shows brief statistics about the tasks
 - **Responsive Design**: The application is fully responsive and works well on all devices.
 
 ### Security
-- Implemented basic security measures such as Input validations, Authorization, CORS, Logging and Rate limiting to protect the application from common vulnerabilities.
+- Implemented basic security measures such as Input validations, Authorization, CORS, Logging, and Rate limiting to protect the application from common vulnerabilities.
 - Server-side validation to ensure that task data is valid before saving it to the database.
 
 ## Components
@@ -34,7 +34,7 @@ A list of tasks displaying the title, description, and status of each task. User
 A dropdown to filter tasks by their status. Options include "All", "To Do", "In Progress", "Discarded" and "Done."
 
 ### User Profile
-Displays user information, avatar, brief statistics of their tasks and allows users to update their profile name.
+Displays user information, avatar, and brief statistics of their tasks and allows users to update their profile name.
 
 ## Technologies Used
 
