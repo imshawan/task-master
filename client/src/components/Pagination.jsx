@@ -6,7 +6,7 @@ const useStyles = makeStyles()((theme) => ({
     root: {
         display: 'flex',
         justifyContent: 'center',
-        marginTop: '3rem',
+        marginTop: '1rem',
         '& .MuiPaginationItem-root': {
             color: theme.palette.primary.main,
         },

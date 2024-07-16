@@ -30,8 +30,8 @@ const useStyles = makeStyles()((theme) => ({
         borderRadius: theme.shape.borderRadius * 2,
         padding: theme.spacing(4),
         boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
-        height: '748px',
-        overflow: 'hidden'
+        minHeight: '748px',
+        // overflow: 'hidden'
     },
     tasks: {
         // maxHeight: '500px',
