@@ -21,7 +21,6 @@ const useStyles = makeStyles()((theme) => ({
     modalContent: {
         backgroundColor: theme.palette.background.paper,
         borderRadius: theme.shape.borderRadius,
-        width: '90%',
     },
     actions: {
         display: 'flex',
@@ -172,9 +171,9 @@ const TaskModal = ({ open, onClose, onCreate }) => {
                         </FormControl>
                     </Grid>
 
-                    <Grid item xs={12} sm={6}>
+                    <Grid item xs={12} mt={1} sm={6}>
 
-                        <FormControl error={Boolean(errors.dueDate)}>
+                        <FormControl fullWidth error={Boolean(errors.dueDate)}>
                             <Controller
                                 control={control}
                                 name="dueDate"
