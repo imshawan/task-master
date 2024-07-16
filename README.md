@@ -9,12 +9,12 @@ TaskMaster is a task management application built with Node.js, Express, MongoDB
 - **Update Tasks**: Users can update the details of existing tasks.
 - **Delete Tasks**: Users can delete tasks that are no longer needed.
 - **View Tasks**: Users can view a list of all their tasks.
-- **Filter Tasks**: Users can filter tasks by status (e.g., "All," "To Do," "In Progress," "Done").
+- **Filter Tasks**: Users can filter tasks by status (e.g., "All", "To Do", "In Progress", "Done", "Discarded").
 - **Sort and Search Tasks**: Users can sort tasks by different criteria and search for tasks by keywords.
 
 ### Additional Features
 - **User Authentication and Authorization**: Secure access to the application with user authentication. Only authorized users can access and manage their tasks.
-- **Task Due Dates and Reminders**: Set due dates for tasks and receive reminders.
+- **Task Due Dates**: Ability to set due dates for tasks and track them on the go.
 - **User Profiles**: Users can have profiles with avatars.
 - **Responsive Design**: The application is fully responsive and works well on all devices.
 
@@ -31,7 +31,7 @@ A form to create a new task with fields for title, description, and status. This
 A list of tasks displaying the title, description, and status of each task. Users can update the status or delete a task directly from the list.
 
 ### Task Filter
-A dropdown to filter tasks by their status. Options include "All," "To Do," "In Progress," and "Done."
+A dropdown to filter tasks by their status. Options include "All", "To Do", "In Progress", "Discarded" and "Done."
 
 ### User Profile
 Displays user information, avatar, brief statistics of their tasks and allows users to update their profile name.
