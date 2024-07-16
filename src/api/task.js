@@ -8,7 +8,11 @@ const validTaskFields = ['To Do', 'In Progress', 'Done', 'Discarded'];
 
 taskApi.get = async function (req) {
     const { user } = req;
-    const { page = 1, limit = 10, status, search } = req.query;
+    const { status, search } = req.query;
+
+    let page = Number(req.query.page) || 1,
+        limit = Number(req.query.limit) || 6;
+        
     const query = { author: user._id };
 
     if (status && validTaskFields.includes(status)) {

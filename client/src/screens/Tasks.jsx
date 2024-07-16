@@ -14,6 +14,7 @@ import { endpoints,  parseParams } from '../utilities';
 import TaskCard from '../components/TaskCard';
 import NoTasks from '../components/NoTasks';
 import Loading from '../components/Loading';
+import TaskPagination from '../components/Pagination';
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -29,7 +30,8 @@ const useStyles = makeStyles()((theme) => ({
         borderRadius: theme.shape.borderRadius * 2,
         padding: theme.spacing(4),
         boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
-        minHeight: '694px',
+        height: '748px',
+        overflow: 'hidden'
     },
     tasks: {
         // maxHeight: '500px',
@@ -114,7 +116,8 @@ const TaskList = () => {
     const [openModal, setOpenModal] = useState(false);
     const [loading, setLoading] = useState(false);
     const [profile, setProfile] = useState({completionRate: 0, completedTasks: 0, totalTasks: 0});
-    const [pagination, setPagination] = useState({page: 1, limit: 10, nextPage: null, currentPage: null, totalPages: null});
+    const [pagination, setPagination] = useState({page: 1, limit: 5, nextPage: null, currentPage: null, totalPages: null});
+    const [paginationParams, setPaginationParams] = useState({status: null, search: null});
 
     const addTask = (task) => {
         setTasks(prev => [task, ...prev]);
@@ -156,9 +159,10 @@ const TaskList = () => {
     const handleSearch = _.debounce(({target}) => {
         let {value} = target;
         loadTasks(pagination.nextPage || 1, pagination.limit, filter, value).then(data => data && setTasks(data));
+        setPaginationParams(prev => ({...prev, search: value}));
     }, 500);
 
-    const loadTasks = async (page=1, limit=10, status, search) => {
+    const loadTasks = async (page=1, limit=5, status, search) => {
         setLoading(true);
 
         const query = new URLSearchParams({page, limit});
@@ -194,9 +198,10 @@ const TaskList = () => {
             loadTasks().then(data => data && setTasks(data));
         } else {
             loadTasks(1, pagination.limit, filter).then(data => data && setTasks(data));
+            setPaginationParams(prev => ({...prev, status: filter}))
         }
-        
-    }, [filter, pagination.limit]);
+        // eslint-disable-next-line
+    }, [filter]);
 
     useEffect(() => {
         async function fetchTasks() {
@@ -273,6 +278,7 @@ const TaskList = () => {
                             ))}
                         </AnimatePresence> : (loading ? <Loading title={'Loading Your Tasks'} /> : <NoTasks onAddTask={() => setOpenModal(true)} />)}
                     </Box>
+                    <TaskPagination pagination={pagination} paginationParams={paginationParams} loaderFn={loadTasks} setTasks={setTasks} />
                 </Container>
                 <Box>
                     <SpeedDial

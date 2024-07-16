@@ -118,7 +118,9 @@ export default function TaskCard({ task, onDatachange, onRemove }) {
         if (onDatachange && typeof onDatachange === 'function') {
             onDatachange({...task, status});
         }
-    }, [status, task, onDatachange]);
+
+        // eslint-disable-next-line
+    }, [status]);
 
     return (
         <CardContent>
