@@ -43,7 +43,7 @@ const STATUSES = ['To Do', 'In Progress', 'Done', 'Discarded'];
 export default function TaskCard({ task, onDatachange, onRemove }) {
     const { classes } = useStyles();
     const theme = useTheme();
-    const [expandedTask, setExpandedTask] = useState(null);
+    const [expandedTask, setExpandedTask] = useState(task._id);
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [due, ] = React.useState(calculateDueDate(task.dueDate));
     const [status, setStatus] = React.useState(task.status);
