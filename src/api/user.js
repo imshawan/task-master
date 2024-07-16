@@ -1,9 +1,11 @@
 const bcrypt = require('bcryptjs');
+const path = require('path');
 const {User} = require('../models');
 const utilities = require('../utilities');
+const constants = require('../../constants');
 
 const user = module.exports;
-const validuserFields = ['_id', 'username', 'fullname', 'email', 'joinedAt', 'completedTasks', 'totalTasks'];
+const validuserFields = ['_id', 'username', 'fullname', 'email', 'joinedAt', 'completedTasks', 'totalTasks', 'picture'];
 
 user.register = async function (req, res) {
     const {username, email, password, fullname} = req.body;
@@ -36,17 +38,33 @@ user.get = async function (req) {
     return user
 }
 
-// As of now, let's only allow the users to update their full name
+// As of now, let's only allow the users to update their full name and picture
 user.update = async function (req) {
     const {fullname} = req.body;
-    if (!fullname) return;
+    let fields = 0;
 
     const user = await User.findById(req.user._id);
-    if (user.fullname === fullname) return;
+    if (fullname && user.fullname === fullname) return;
 
-    user.fullname = fullname;
+    const {file} = req;
+
+    if (fullname) {
+        user.fullname = fullname;
+        fields++;
+    }
+
+    if (file) {
+        let {filename} = file;
+        let uploadsDir = path.basename(constants.uploads);
+        
+        user.picture = `/${uploadsDir}/${filename}`;
+
+        fields++;
+    }
+
+    if (!fields) return;
 
     await user.save();
 
-    return { message: 'User updated successfully' };
+    return { message: 'User updated successfully', ...(file ? {picture: user.picture} : {}) };
 }

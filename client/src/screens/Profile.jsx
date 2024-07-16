@@ -18,6 +18,7 @@ import TextField from '../components/TextField';
 import Button from '../components/Button';
 import { endpoints } from '../utilities';
 import Loading from '../components/Loading';
+import ProfileAvatar from '../components/ProfileAvatar';
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -43,11 +44,6 @@ const useStyles = makeStyles()((theme) => ({
     },
     header: {
         marginBottom: theme.spacing(4),
-    },
-    avatar: {
-        width: theme.spacing(10),
-        height: theme.spacing(10),
-        backgroundColor: theme.palette.primary.main,
     },
     form: {
         marginTop: theme.spacing(3),
@@ -148,6 +144,10 @@ const Profile = () => {
         }
     };
 
+    const handlePictureChange = (picture) => {
+        setUser(prev => ({ ...prev, picture }));
+    }
+
     useEffect(() => {
         setInitials(getInitials(user.fullname));
     }, [fullname, user.fullname]);
@@ -192,7 +192,7 @@ const Profile = () => {
 
     return (
         <React.Fragment>
-            <NavBar />
+            <NavBar user={user} />
             <Box className={classes.root}>
                 <Container maxWidth="md" className={classes.container}>
                     <MotionContainer
@@ -203,10 +203,8 @@ const Profile = () => {
                     >
                         {!profileLoading ? <Box>
                             <Grid container className={classes.header}>
-                                <Grid item display={'flex'} justifyContent={'center'} xs={12} sm={1.7}>
-                                    <Avatar className={classes.avatar}>
-                                        {initials}
-                                    </Avatar>
+                                <Grid item display={'flex'} justifyContent={'center'} xs={12} sm={2}>
+                                    <ProfileAvatar initials={initials} picture={user.picture} pictureOnChange={handlePictureChange} />
                                 </Grid>
                                 <Grid item xs={12} sm={10} textAlign={isMobile ? 'center' : 'left'}>
                                     <Typography variant="h4">

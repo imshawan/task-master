@@ -8,6 +8,7 @@ const {rateLimit} = require('express-rate-limit');
 
 const middlewares = require('./middlewares');
 const database = require('./database');
+const constants = require('../constants');
 
 const router = require('./routes/index');
 
@@ -19,6 +20,9 @@ module.exports.initialize = async function () {
     await database.initializeConnection();
     await initializeExpressServer(app);
 
+    // Serve static files from uploads
+    app.use('/uploads', express.static(constants.uploads));
+    
     // Mounting the base API router
     app.use('/', router);
 

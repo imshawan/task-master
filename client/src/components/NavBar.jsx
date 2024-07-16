@@ -27,6 +27,7 @@ const pages = [
         url: '/about'
     }
 ];
+const host = process.env.REACT_APP_HOST;
 
 const useStyles = makeStyles()((theme) => ({
     appBar: {
@@ -103,7 +104,7 @@ const useStyles = makeStyles()((theme) => ({
     }
 }));
 
-function NavBar() {
+function NavBar({user}) {
     const [anchorElNav, setAnchorElNav] = React.useState(null);
     const [anchorElUser, setAnchorElUser] = React.useState(null);
     const navigate = useNavigate();
@@ -132,8 +133,8 @@ function NavBar() {
     }
 
     React.useEffect(() => {
-        setProfile(JSON.parse(localStorage.getItem('user')) || {})
-    }, []);
+        setProfile(user || JSON.parse(localStorage.getItem('user')) || {})
+    }, [user]);
 
     return (
         <AppBar className={classes.appBar}>
@@ -209,7 +210,7 @@ function NavBar() {
                     <Box className={classes.userMenu}>
                         <Tooltip title="Open settings">
                             <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                                <Avatar alt={profile.fullname} src="/" />
+                                <Avatar alt={profile.fullname} src={host + profile.picture} />
                             </IconButton>
                         </Tooltip>
                         <Menu

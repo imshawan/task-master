@@ -10,7 +10,7 @@ const theme = createTheme({
             contrastText: '#ffffff',
         },
         secondary: {
-            main: '#f50057', // A complementary color, you can adjust this
+            main: '#f50057',
             light: '#ff5983',
             dark: '#bb002f',
             contrastText: '#ffffff',

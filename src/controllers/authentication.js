@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 const {User} = require('../models');
 const utilities = require('../utilities');
 
-const validuserFields = ['_id', 'username', 'fullname', 'email', 'joinedAt', 'completedTasks', 'totalTasks'];
+const validuserFields = ['_id', 'username', 'fullname', 'email', 'joinedAt', 'completedTasks', 'totalTasks', 'picture'];
 const jwtSecret = String(process.env.JWT_SECRET);
 
 module.exports.signin = async function(req, res) {

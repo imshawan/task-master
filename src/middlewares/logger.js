@@ -1,5 +1,7 @@
 const { createLogger, format, transports } = require('winston');
 const { combine, timestamp, printf } = format;
+const path = require('path');
+const constants = require('../../constants');
 
 // Formatter for logging the outputs
 const logFormat = printf(({ level, message, timestamp }) => {
@@ -16,7 +18,7 @@ const logger = createLogger({
         new transports.Console(),  // For console loggings
         // Separate file transports for different log levels
         new transports.File({
-            filename: 'logs/output.log',
+            filename: path.resolve(constants.logsDir, 'output.log'),
             level: 'info',
             format: combine(
                 format((info) => {
@@ -28,7 +30,7 @@ const logger = createLogger({
         }),
 
         new transports.File({
-            filename: 'logs/error.log',
+            filename: path.resolve(constants.logsDir, 'error.log'),
             level: 'error',
             format: combine(
                 format((info) => {
@@ -40,7 +42,7 @@ const logger = createLogger({
         })
     ],
     exceptionHandlers: [
-        new transports.File({ filename: 'logs/error.log' })  // Log uncaught exceptions to a separate file instead of the main to avoid confusion
+        new transports.File({ filename: path.resolve(constants.logsDir, 'error.log') })  // Log uncaught exceptions to a separate file instead of the main to avoid confusion
     ],
     exitOnError: false  // Continue logging even if an error occurs
 });
