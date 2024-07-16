@@ -6,7 +6,7 @@ import { makeStyles } from 'tss-react/mui';
 import _ from 'lodash';
 // import TaskAltIcon from '@mui/icons-material/TaskAlt';
 import SpeedDialIcon from '@mui/material/SpeedDialIcon';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { toast } from 'react-toastify';
 import TaskModal from '../components/TaskModal';
 import NavBar from '../components/NavBar';
