@@ -39,6 +39,10 @@ const ProfileAvatar = ({ initials, picture, pictureOnChange }) => {
     const handleFileChange = async (event) => {
         const file = event.target.files[0];
         if (file) {
+            if (!String(file.type).includes('image')) {
+                return toast.error('Only images are allowed');
+            }
+            
             const reader = new FileReader();
             reader.onload = () => {
                 setProfilePicture(reader.result);
