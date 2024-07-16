@@ -146,7 +146,6 @@ taskApi.remove = async function (req) {
 
 
 async function handleUserCounters(userId, field, value) {
-    console.log('userId', userId, field, value);
     await User.findByIdAndUpdate(
         userId,
         { $inc: { [field]: value } },
