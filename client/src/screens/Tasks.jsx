@@ -30,7 +30,7 @@ const useStyles = makeStyles()((theme) => ({
         borderRadius: theme.shape.borderRadius * 2,
         padding: theme.spacing(4),
         boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
-        minHeight: '748px',
+        minHeight: '780px',
         // overflow: 'hidden'
     },
     tasks: {
@@ -107,6 +107,7 @@ const useStyles = makeStyles()((theme) => ({
 }));
 
 const MotionCard = motion(Card);
+const MotionContainer = motion(Container);
 
 const TaskList = () => {
     const { classes } = useStyles();
@@ -222,7 +223,12 @@ const TaskList = () => {
             <NavBar />
             <TaskModal open={openModal} onClose={() => setOpenModal(false)} onCreate={addTask} />
             <Box className={classes.root}>
-                <Container maxWidth="md" className={classes.container}>
+                <MotionContainer 
+                    maxWidth="md" 
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5 }}
+                    className={classes.container}>
                     <Grid container spacing={2} className={classes.filterContainer}>
                             <Grid item xs={12} sm={8}>
                                 <TextField
@@ -263,7 +269,7 @@ const TaskList = () => {
                     </Box>
             
                     <Box className={classes.tasks}>
-                        {tasks.length > 0 ? <AnimatePresence>
+                        {tasks.length > 0 ? <Box>
                             {tasks.map((task) => (
                                 <MotionCard
                                     key={task._id}
@@ -276,10 +282,10 @@ const TaskList = () => {
                                     <TaskCard task={task} onDatachange={onTaskUpdate} onRemove={onTaskRemove} />
                                 </MotionCard>
                             ))}
-                        </AnimatePresence> : (loading ? <Loading title={'Loading Your Tasks'} /> : <NoTasks onAddTask={() => setOpenModal(true)} />)}
+                        </Box> : (loading ? <Loading title={'Loading Your Tasks'} /> : <NoTasks onAddTask={() => setOpenModal(true)} />)}
                     </Box>
                     <TaskPagination pagination={pagination} paginationParams={paginationParams} loaderFn={loadTasks} setTasks={setTasks} />
-                </Container>
+                </MotionContainer>
                 <Box>
                     <SpeedDial
                         ariaLabel="SpeedDial basic example"
