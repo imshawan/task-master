@@ -259,8 +259,8 @@ const TaskList = () => {
                     </Box>
             
                     <Box className={classes.tasks}>
-                        <AnimatePresence>
-                            {tasks.length ? tasks.map((task) => (
+                        {tasks.length > 0 ? <AnimatePresence>
+                            {tasks.map((task) => (
                                 <MotionCard
                                     key={task._id}
                                     className={classes.taskCard}
@@ -271,8 +271,8 @@ const TaskList = () => {
                                 >   
                                     <TaskCard task={task} onDatachange={onTaskUpdate} onRemove={onTaskRemove} />
                                 </MotionCard>
-                            )) : (loading ? <Loading title={'Loading Your Tasks'} /> : <NoTasks onAddTask={() => setOpenModal(true)} />)}
-                        </AnimatePresence>
+                            ))}
+                        </AnimatePresence> : (loading ? <Loading title={'Loading Your Tasks'} /> : <NoTasks onAddTask={() => setOpenModal(true)} />)}
                     </Box>
                 </Container>
                 <Box>

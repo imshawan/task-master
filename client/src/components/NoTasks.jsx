@@ -30,10 +30,9 @@ const NoTasks = ({ onAddTask }) => {
 
     return (
         <Box className={classes.root}>
-
             <AssignmentIcon className={classes.icon} />
             <Typography variant="h5" gutterBottom>
-                No Tasks Yet
+                Nothing was found!
             </Typography>
             <Typography variant="body1" paragraph>
                 It looks like you haven't added any tasks.
@@ -46,7 +45,7 @@ const NoTasks = ({ onAddTask }) => {
                 onClick={onAddTask}
                 className={classes.button}
             >
-                Add Your First Task
+                Create a new Task
             </Button>
         </Box>
     );
