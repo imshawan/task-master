@@ -31,7 +31,7 @@ export default function TaskCard({ task, onDatachange, onRemove }) {
     const { classes } = useStyles();
     const [expandedTask, setExpandedTask] = useState(null);
     const [anchorEl, setAnchorEl] = React.useState(null);
-    const [due, setDue] = React.useState(calculateDueDate(task.dueDate));
+    const [due, ] = React.useState(calculateDueDate(task.dueDate));
     const [status, setStatus] = React.useState(task.status);
     const open = Boolean(anchorEl);
 
@@ -55,11 +55,11 @@ export default function TaskCard({ task, onDatachange, onRemove }) {
                 toast.success(data.response.message);
             }
         } catch ({ message, response }) {
-
+            let msg = message;
             if (response && response.data.status && response.data.status?.message) {
-                message = response.data.status.message;
+                msg = response.data.status.message;
             }
-            toast.error(message);
+            toast.error(msg);
             setStatus(prev);
         }
     }
@@ -89,11 +89,12 @@ export default function TaskCard({ task, onDatachange, onRemove }) {
                         toast.success(data.response.message);
                     }
                 } catch ({ message, response }) {
-        
+                    let msg = message;
+
                     if (response && response.data.status && response.data.status?.message) {
-                        message = response.data.status.message;
+                        msg = response.data.status.message;
                     }
-                    toast.error(message);
+                    toast.error(msg);
                 }
             }
         });
@@ -117,19 +118,19 @@ export default function TaskCard({ task, onDatachange, onRemove }) {
         if (onDatachange && typeof onDatachange === 'function') {
             onDatachange({...task, status});
         }
-    }, [status]);
+    }, [status, task, onDatachange]);
 
     return (
         <CardContent>
             <Grid container alignItems="center" spacing={2}>
-                <Grid item xs={status != 'Done' ? 7 : 9} className={classes.cardContent} onClick={() => setExpandedTask(expandedTask === task._id ? null : task._id)}>
+                <Grid item xs={status !== 'Done' ? 7 : 9} className={classes.cardContent} onClick={() => setExpandedTask(expandedTask === task._id ? null : task._id)}>
                     <Typography variant="h6">{task.title}</Typography>
                 </Grid>
             
                 {status !== 'Done' && <Grid item xs={2}>
                     <Chip
                         label={due}
-                        color={due == 'Overdue' ? 'secondary' : 'primary'}
+                        color={due === 'Overdue' ? 'secondary' : 'primary'}
                         size="small"
                         title={due}
                         className={classes.chip}

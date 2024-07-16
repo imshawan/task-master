@@ -136,12 +136,13 @@ const Profile = () => {
             }
 
         } catch ({ message, response }) {
+            let msg = message;
 
             if (response && response.data.status && response.data.status?.message) {
-                message = response.data.status.message;
+                msg = response.data.status.message;
             }
 
-            toast.error(message);
+            toast.error(msg);
         } finally {
             setIsFetching(false);
         }
@@ -149,7 +150,7 @@ const Profile = () => {
 
     useEffect(() => {
         setInitials(getInitials(user.fullname));
-    }, [fullname]);
+    }, [fullname, user.fullname]);
 
     useEffect(() => {
         // So that the default value can change after the state has changed with actual user data
@@ -174,11 +175,13 @@ const Profile = () => {
     
             } catch ({ message, response }) {
     
+                let msg = message;
+
                 if (response && response.data.status && response.data.status?.message) {
-                    message = response.data.status.message;
+                    msg = response.data.status.message;
                 }
-    
-                toast.error(message);
+
+                toast.error(msg);
             } finally {
                 setTimeout(() => setProfileLoading(false), 500);
             }

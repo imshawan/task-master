@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Typography, TextField, Grid, useTheme, useMediaQuery, Card, 
-    SpeedDial, Container, Select, MenuItem, InputLabel, FormControl, LinearProgress,
+import { Box, Typography, TextField, Grid, Card, SpeedDial, Container, Select, MenuItem, InputLabel, 
+    FormControl, LinearProgress,
 } from '@mui/material';
 import { makeStyles } from 'tss-react/mui';
 import _ from 'lodash';
@@ -108,8 +108,6 @@ const MotionCard = motion(Card);
 
 const TaskList = () => {
     const { classes } = useStyles();
-    const theme = useTheme();
-    const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
     const [tasks, setTasks] = useState([]);
     const [filter, setFilter] = useState('All');
@@ -124,7 +122,7 @@ const TaskList = () => {
 
     const onTaskRemove = (task) => {
         if (task && Object.keys(task).length) {
-            setTasks(prev => prev.filter(t => t._id != task._id));
+            setTasks(prev => prev.filter(t => t._id !== task._id));
         }
     }
 
@@ -139,18 +137,18 @@ const TaskList = () => {
         let {completedTasks, totalTasks} = profile;
 
         if (task && Object.keys(task).length) {
-            let prevData = tasks.find(t => t._id == task._id);
+            let prevData = tasks.find(t => t._id === task._id);
             
             // Ensure that the previous status was not "Done" or else it will illegally increment the counter
-            if (task.status == 'Done' && prevData.status != 'Done') {
+            if (task.status === 'Done' && prevData.status !== 'Done') {
                 completedTasks++;
 
             // If the previous status was "Done" and currently it's being changed to undone, than only decrement
-            } else if (task.status != 'Done' && prevData.status == 'Done') {
+            } else if (task.status !== 'Done' && prevData.status === 'Done') {
                 completedTasks--;
             }
 
-            setTasks(prev => prev.map(t => t._id == task._id ? task : t));
+            setTasks(prev => prev.map(t => t._id === task._id ? task : t));
             setProfile({...profile, completedTasks, completionRate: getCompletionPercentage(completedTasks, totalTasks)});
         }
     }
@@ -164,7 +162,7 @@ const TaskList = () => {
         setLoading(true);
 
         const query = new URLSearchParams({page, limit});
-        if (status || status != 'All') {
+        if (status || status !== 'All') {
             query.append('status', status);
         }
         if (search) {
@@ -178,12 +176,13 @@ const TaskList = () => {
                 return data.response.tasks; 
             }
         } catch ({ message, response }) {
+            let msg = message;
 
             if (response && response.data.status && response.data.status?.message) {
-                message = response.data.status.message;
+                msg = response.data.status.message;
             }
 
-            toast.error(message);
+            toast.error(msg);
         } finally {
             setLoading(false);
         }
@@ -191,13 +190,13 @@ const TaskList = () => {
 
     useEffect(() =>  {
         if (!filter) return;
-        if (filter == 'All') {
+        if (filter === 'All') {
             loadTasks().then(data => data && setTasks(data));
         } else {
             loadTasks(1, pagination.limit, filter).then(data => data && setTasks(data));
         }
         
-    }, [filter]);
+    }, [filter, pagination.limit]);
 
     useEffect(() => {
         async function fetchTasks() {
