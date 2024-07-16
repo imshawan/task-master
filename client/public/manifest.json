@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "TaskMaster",
+  "name": "A powerful task management application designed to help individuals and teams organize, prioritize, and accomplish their goals efficiently.",
   "icons": [
     {
       "src": "favicon.ico",
