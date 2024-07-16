@@ -152,8 +152,11 @@ const TaskList = () => {
                 completedTasks--;
             }
 
+            let _profile = {...profile, completedTasks, completionRate: getCompletionPercentage(completedTasks, totalTasks)};
+
             setTasks(prev => prev.map(t => t._id === task._id ? task : t));
-            setProfile({...profile, completedTasks, completionRate: getCompletionPercentage(completedTasks, totalTasks)});
+            setProfile(_profile);
+            localStorage.setItem('user', JSON.stringify(_profile))
         }
     }
 
