@@ -27,5 +27,9 @@ module.exports.signin = async function(req, res) {
     // Return only the fields that are required for the user, filter password fields and etc
     let userData = utilities.filterObject(user, validuserFields);
 
+    if (user.completedTasks && user.totalTasks) {
+        userData['completionRate'] = Math.round((user.completedTasks / user.totalTasks) * 100);
+    }
+
     utilities.response.format(200, res, {token, message: 'Authentication successful', user: userData});
 }

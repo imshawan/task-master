@@ -115,17 +115,12 @@ const TaskList = () => {
     const [filter, setFilter] = useState('All');
     const [openModal, setOpenModal] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [profile, setProfile] = useState({completionRate: 0, completedTasks: 0, totalTasks: 0});
     const [pagination, setPagination] = useState({page: 1, limit: 10, nextPage: null, currentPage: null, totalPages: null});
 
     const addTask = (task) => {
         setTasks(prev => [task, ...prev]);
     };
-
-    const onTaskUpdate = (task) => {
-        if (task && Object.keys(task).length) {
-            setTasks(prev => prev.map(t => t._id == task._id ? task : t));
-        }
-    }
 
     const onTaskRemove = (task) => {
         if (task && Object.keys(task).length) {
@@ -133,13 +128,32 @@ const TaskList = () => {
         }
     }
 
-    const getCompletionPercentage = () => {
-        const completedTasks = tasks.filter(task => task.status === 'Done').length;
-        let num = (completedTasks / tasks.length) * 100;
+    const getCompletionPercentage = (completedTasks, total) => {
+        let num = Math.round((completedTasks / total) * 100);
         if (!num) return 0;
 
         return num;
     };
+
+    const onTaskUpdate = (task) => {
+        let {completedTasks, totalTasks} = profile;
+
+        if (task && Object.keys(task).length) {
+            let prevData = tasks.find(t => t._id == task._id);
+            
+            // Ensure that the previous status was not "Done" or else it will illegally increment the counter
+            if (task.status == 'Done' && prevData.status != 'Done') {
+                completedTasks++;
+
+            // If the previous status was "Done" and currently it's being changed to undone, than only decrement
+            } else if (task.status != 'Done' && prevData.status == 'Done') {
+                completedTasks--;
+            }
+
+            setTasks(prev => prev.map(t => t._id == task._id ? task : t));
+            setProfile({...profile, completedTasks, completionRate: getCompletionPercentage(completedTasks, totalTasks)});
+        }
+    }
 
     const handleSearch = _.debounce(({target}) => {
         let {value} = target;
@@ -193,6 +207,9 @@ const TaskList = () => {
             }
         }
 
+        // Load the cached profile from the localstorage
+        setProfile(JSON.parse(localStorage.getItem('user')) || {});
+
         fetchTasks();
     }, []);
 
@@ -235,10 +252,10 @@ const TaskList = () => {
                                 Overall Progress
                             </Typography>
                             <Typography variant="body2" color="textSecondary" gutterBottom>
-                                {getCompletionPercentage()}%
+                                {profile.completionRate}%
                             </Typography>
                         </Box>
-                        <LinearProgress variant="determinate" value={getCompletionPercentage()} />
+                        <LinearProgress variant="determinate" value={profile.completionRate} />
                     </Box>
             
                     <Box className={classes.tasks}>

@@ -118,7 +118,7 @@ const Profile = () => {
     const formatDate = (date) => {
         date = new Date(String(date));
 
-        const options = { year: 'numeric', month: 'long', day: 'numeric' };
+        const options = { year: 'numeric', month: 'long', day: 'numeric' }; //e.g. May 24, 2024
         const formatter = new Intl.DateTimeFormat('en-US', options);
         return formatter.format(date);
     }
@@ -131,6 +131,7 @@ const Profile = () => {
             if (data && data.response && data.response.message) {
                 toast.success(data.response.message);
                 
+                // Also update the localstorage value of user's fullname
                 localStorage.setItem('user', JSON.stringify({...user, fullname: formData.fullname}));
             }
 
@@ -166,6 +167,9 @@ const Profile = () => {
                     setUser(response)
                     setInitials(getInitials(response.fullname));
                     setFullname(response.fullname)
+
+                    // Update the locally stored data
+                    localStorage.setItem('user', JSON.stringify(response)) // Update the user profile data
                 }
     
             } catch ({ message, response }) {

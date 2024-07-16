@@ -47,6 +47,8 @@ export default function TaskCard({ task, onDatachange, onRemove }) {
         handleClose();
         setStatus(val);
 
+        if (prev === val) return;
+
         try {
             let { data } = await window.axiosInstance.put(parseParams(endpoints.UPDATE_TASK, {id}), {status: val});
             if (data && data.response && data.response.message) {
@@ -164,7 +166,7 @@ export default function TaskCard({ task, onDatachange, onRemove }) {
                         open={open}
                         onClose={handleClose}
                     >
-                        {STATUSES.map((e, i) => <MenuItem key={i} onClick={() => handleStatusChange(e, task._id)}>Mark as "<em>{e}</em>"</MenuItem>)}
+                        {STATUSES.map((e, i) => <MenuItem key={i} disabled={e === status} onClick={() => handleStatusChange(e, task._id)}>Mark as "<em>{e}</em>"</MenuItem>)}
                         <Divider />
 
                         <MenuItem onClick={() => deleteTask(task._id)}>

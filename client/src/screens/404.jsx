@@ -1,11 +1,5 @@
 import React from 'react';
-import {
-    Box,
-    Typography,
-    Button,
-    Container,
-    useTheme,
-} from '@mui/material';
+import { Box, Typography, Button, Container } from '@mui/material';
 import { makeStyles } from 'tss-react/mui';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import { motion } from 'framer-motion';
@@ -50,7 +44,6 @@ const MotionBox = motion(Box);
 
 const NotFound = () => {
     const { classes } = useStyles();
-    const theme = useTheme();
 
     return (
         <React.Fragment>
