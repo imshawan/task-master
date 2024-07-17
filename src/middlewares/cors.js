@@ -1,6 +1,6 @@
 var cors = require('cors')
 
-var whitelist = ['http://localhost:4000', 'https://api-task-master-wu2f.onrender.com'];
+var whitelist = ['http://localhost:4000', 'https://task-master-lqfw.onrender.com'];
 
 var corsOptionsDelegate = function (req, callback) {
     var corsOptions;
