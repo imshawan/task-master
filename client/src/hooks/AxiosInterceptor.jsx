@@ -20,7 +20,7 @@ export const useAxiosInterceptor = () => {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json, text/plain, */*',
             },
-            timeout: 10000, // Set a timeout limit (optional)
+            timeout: 30000, // Set a timeout limit (optional)
         });
 
         axiosInstance.interceptors.request.use(
