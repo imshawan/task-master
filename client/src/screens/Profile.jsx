@@ -144,6 +144,10 @@ const Profile = () => {
         }
     };
 
+    const handeNameChange = ({target}) => {
+        setFullname(target.value);
+    }
+
     const handlePictureChange = (picture) => {
         setUser(prev => ({ ...prev, picture }));
     }
@@ -245,7 +249,7 @@ const Profile = () => {
                                         whileHover={{ scale: 1.05 }}
                                     >
                                         <TrendingUpIcon className={classes.statsIcon} />
-                                        <Typography variant="h6">{user.completionRate || 0}%</Typography>
+                                        <Typography variant="h6">{Math.floor(user.completionRate) || 0}%</Typography>
                                         <Typography variant="body2">Completion Rate</Typography>
                                         <LinearProgress
                                             variant="determinate"
@@ -259,7 +263,7 @@ const Profile = () => {
                             <Typography variant="h6" gutterBottom>
                                 Account information
                             </Typography>
-                            <form onSubmit={handleSubmit} className={classes.form}>
+                            <form className={classes.form}>
                                 <Grid container spacing={3}>
                                     <Grid item xs={12} sm={6}>
                                         <Controller
@@ -269,11 +273,11 @@ const Profile = () => {
                                                 field="fullname"
                                                 label="Name"
                                                 fullWidth
-                                                onChange={({ target }) => setFullname(target.value)}
                                                 value={fullname}
                                                 variant="outlined"
                                                 errors={errors}
                                                 {...field}
+                                                onChange={handeNameChange}
                                             />)}
                                         />
                                     </Grid>
