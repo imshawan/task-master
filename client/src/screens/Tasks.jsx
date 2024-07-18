@@ -121,8 +121,15 @@ const TaskList = () => {
     const [paginationParams, setPaginationParams] = useState({status: null, search: null});
 
     const addTask = (task) => {
-        setTasks(prev => [task, ...prev]);
+        setTasks(prev => {
+            if (prev.length >= pagination.limit) {
+                // Remove the last element by slicing the array
+                return [task, ...prev.slice(0, prev.length - 1)];
+            }
+            return [task, ...prev];
+        });
     };
+    
 
     const onTaskRemove = (task) => {
         if (task && Object.keys(task).length) {
