@@ -21,7 +21,7 @@ const Pagination = ({pagination, paginationParams, loaderFn, setTasks}) => {
     const {status, search} = paginationParams;
 
     const handlePageChange = (event, value) => {
-        if (value == page) return;
+        if (value === page) return;
 
         setPage(value)
         loaderFn(value, limit, status, search).then(tasks => setTasks(tasks))

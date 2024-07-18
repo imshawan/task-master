@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {
-    Box, Typography, Container, Avatar, Grid, Divider, useTheme, Paper, LinearProgress, useMediaQuery, CircularProgress
+    Box, Typography, Container, Grid, Divider, useTheme, Paper, LinearProgress, useMediaQuery, CircularProgress
 } from '@mui/material';
 import { makeStyles } from 'tss-react/mui';
 import SaveIcon from '@mui/icons-material/Save';

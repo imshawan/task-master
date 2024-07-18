@@ -9,18 +9,20 @@ import Menu from '@mui/material/Menu';
 import MenuIcon from '@mui/icons-material/Menu';
 import Container from '@mui/material/Container';
 import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import TaskAltIcon from '@mui/icons-material/TaskAlt';
 import { useNavigate } from 'react-router-dom';
 import { Divider, ListItemIcon, MenuList } from '@mui/material';
 import { ExitToApp, AccountCircleOutlined } from '@mui/icons-material';
+import Button from './Button';
 
 const pages = [
     {
         label: 'Home',
-        url: '/'
+        url: '/',
+        protected: true
     },
     {
         label: 'About',
@@ -101,7 +103,10 @@ const useStyles = makeStyles()((theme) => ({
     navPageBtn: {
         color: theme.palette.background.default, 
         display: 'block'
-    }
+    },
+    signinBtn: {
+        height: '38px'
+    },
 }));
 
 function NavBar({user}) {
@@ -109,6 +114,7 @@ function NavBar({user}) {
     const [anchorElUser, setAnchorElUser] = React.useState(null);
     const navigate = useNavigate();
     const [profile, setProfile] = React.useState({});
+    const [isAuth, setIsAuth] = React.useState(false);
 
     const { classes } = useStyles();
 
@@ -129,11 +135,15 @@ function NavBar({user}) {
 
     const handleLogout = () => {
         ['user', 'authenticated', 'token'].forEach(e => localStorage.removeItem(e));
-        window.location.reload();
+        window.location.href = '/signin';
     }
 
     React.useEffect(() => {
-        setProfile(user || JSON.parse(localStorage.getItem('user')) || {})
+        let usr = JSON.parse(localStorage.getItem('user'));
+        usr = user || usr;
+
+        setProfile(usr);
+        setIsAuth(usr && Object.keys(usr).length > 0);
     }, [user]);
 
     return (
@@ -150,7 +160,6 @@ function NavBar({user}) {
                     >
                         TASKMASTER
                     </Typography>
-
                     <Box className={classes.navMenu}>
                         <IconButton
                             size="large"
@@ -177,11 +186,14 @@ function NavBar({user}) {
                             open={Boolean(anchorElNav)}
                             onClose={handleCloseNavMenu}
                         >
-                            {pages.map((page, ind) => (
-                                <MenuItem key={ind} onClick={() => navigate(page.url)}>
-                                    <Typography textAlign="center">{page.label}</Typography>
-                                </MenuItem>
-                            ))}
+                            {pages.map((page, ind) => {
+                                if (page.protected && !isAuth) return null;
+                                return (
+                                    <MenuItem key={ind} onClick={() => navigate(page.url)}>
+                                        <Typography textAlign="center">{page.label}</Typography>
+                                    </MenuItem>
+                                )
+                            })}
                         </Menu>
                     </Box>
                     <TaskAltIcon className={classes.taskIconMobile} />
@@ -195,62 +207,70 @@ function NavBar({user}) {
                         TASKMASTER
                     </Typography>
                     <Box className={classes.navMenuDesktop}>
-                        {pages.map((page, ind) => (
-                            <Button
-                                key={ind}
-                                onClick={() => navigate(page.url)}
-                                className={classes.navPageBtn}
-                                sx={{ my: 2 }}
-                            >
-                                {page.label}
-                            </Button>
-                        ))}
+                        {pages.map((page, ind) => {
+                            if (page.protected && !isAuth) return null;
+                            return (
+                                <Button
+                                    key={ind}
+                                    onClick={() => navigate(page.url)}
+                                    className={classes.navPageBtn}
+                                    sx={{ my: 2 }}
+                                >
+                                    {page.label}
+                                </Button>
+                            )
+                        })}
                     </Box>
-
                     <Box className={classes.userMenu}>
-                        <Tooltip title="Open settings">
-                            <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                                <Avatar alt={profile.fullname} src={host + profile.picture} />
-                            </IconButton>
-                        </Tooltip>
-                        <Menu
-                            sx={{ mt: '45px' }}
-                            id="menu-appbar"
-                            anchorEl={anchorElUser}
-                            anchorOrigin={{
-                                vertical: 'top',
-                                horizontal: 'right',
-                            }}
-                            keepMounted
-                            transformOrigin={{
-                                vertical: 'top',
-                                horizontal: 'right',
-                            }}
-                            open={Boolean(anchorElUser)}
-                            onClose={handleCloseUserMenu}
-                        >
-                            {Object.keys(profile).length > 0 && <Box className={classes.userProfile}>
-                                <Typography variant="subtitle1"> {profile.fullname}</Typography>
-                                <Typography color="text.secondary" variant="body2">
-                                    {profile.email}
-                                </Typography>
-                            </Box>}
-                            <Divider />
-                            <MenuList className={classes.userMenuList}>
-                                <MenuItem onClick={() => navigate('/profile')}>
-                                    <ListItemIcon>
-                                        <AccountCircleOutlined />
-                                    </ListItemIcon>
-                                    <Typography textAlign="center">{'Profile'}</Typography>
-                                </MenuItem>
-                                <MenuItem onClick={handleLogout}>
-                                    <ListItemIcon>
-                                        <ExitToApp />
-                                    </ListItemIcon>
-                                    <Typography textAlign="center">{'Log out'}</Typography>
-                                </MenuItem>
-                            </MenuList>
-                        </Menu>
+                        {isAuth ? <React.Fragment>
+                            <Tooltip title="Open settings">
+                                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                                    <Avatar alt={profile.fullname} src={host + profile.picture} />
+                                </IconButton>
+                            </Tooltip>
+                            <Menu
+                                sx={{ mt: '45px' }}
+                                id="menu-appbar"
+                                anchorEl={anchorElUser}
+                                anchorOrigin={{
+                                    vertical: 'top',
+                                    horizontal: 'right',
+                                }}
+                                keepMounted
+                                transformOrigin={{
+                                    vertical: 'top',
+                                    horizontal: 'right',
+                                }}
+                                open={Boolean(anchorElUser)}
+                                onClose={handleCloseUserMenu}
+                            >
+                                {Object.keys(profile).length > 0 && <Box className={classes.userProfile}>
+                                    <Typography variant="subtitle1"> {profile.fullname}</Typography>
+                                    <Typography color="text.secondary" variant="body2">
+                                        {profile.email}
+                                    </Typography>
+                                </Box>}
+                                <Divider />
+                                <MenuList className={classes.userMenuList}>
+                                    <MenuItem onClick={() => navigate('/profile')}>
+                                        <ListItemIcon>
+                                            <AccountCircleOutlined />
+                                        </ListItemIcon>
+                                        <Typography textAlign="center">{'Profile'}</Typography>
+                                    </MenuItem>
+                                    <MenuItem onClick={handleLogout}>
+                                        <ListItemIcon>
+                                            <ExitToApp />
+                                        </ListItemIcon>
+                                        <Typography textAlign="center">{'Log out'}</Typography>
+                                    </MenuItem>
+                                </MenuList>
+                            </Menu>
+                        </React.Fragment> : (
+                            <Button variant="outlined" color='inherit' className={classes.signinBtn} onClick={() => navigate('/signin')}>
+                                Sign In <ArrowForwardIcon />
+                            </Button>
+                        )}
                     </Box>
                 </Toolbar>
             </Container>

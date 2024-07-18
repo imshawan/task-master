@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import {
-    Box, Typography, Link, Paper, Grid, IconButton, InputAdornment, useTheme, useMediaQuery, CircularProgress,
+    Typography, Link, Paper, Grid, IconButton, InputAdornment, useTheme, useMediaQuery, CircularProgress,
 } from '@mui/material';
 import { makeStyles } from 'tss-react/mui';
 import TaskAltIcon from '@mui/icons-material/TaskAlt';
@@ -129,7 +129,7 @@ const Register = () => {
         setIsFetching(true);
 
         try {
-            let { data } = await window.axiosInstance.post(endpoints.REGISTER, formData);
+            await window.axiosInstance.post(endpoints.REGISTER, formData);
 
             Swal.fire({
                 title: 'Registered successfully!',
@@ -145,12 +145,13 @@ const Register = () => {
             });
 
         } catch ({ message, response }) {
+            let msg = message;
 
             if (response && response.data.status && response.data.status?.message) {
-                message = response.data.status.message;
+                msg = response.data.status.message;
             }
 
-            toast.error(message)
+            toast.error(msg)
         } finally {
             setIsFetching(false);
             setUserData(initialValues);

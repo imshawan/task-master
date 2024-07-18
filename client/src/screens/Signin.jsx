@@ -134,12 +134,12 @@ const SignIn = () => {
 
             navigate('/');
         } catch ({message, response}) {
-
+            let msg = message;
             if (response && response.data.status && response.data.status?.message) {
-                message = response.data.status.message;
+                msg = response.data.status.message;
             }
 
-            toast.error(message);
+            toast.error(msg);
         } finally {
             setIsFetching(false);
         }
