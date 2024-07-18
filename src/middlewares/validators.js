@@ -23,7 +23,7 @@ module.exports = {
     ],
     task: [
         body('title').isString().trim().notEmpty().withMessage('Title is required'),
-        body('description').notEmpty().isString().trim().optional(),
+        body('description').optional(),
         body('status')
             .notEmpty()
             .isString()

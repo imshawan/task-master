@@ -43,20 +43,21 @@ const useStyles = makeStyles()((theme) => ({
 const TaskModal = ({ open, onClose, onCreate }) => {
     const initialValues = { title: '', description: '', status: '', dueDate: new Date() };
     const { classes } = useStyles();
-    const theme = useTheme();
+
     const [newTask, setNewTask] = useState(initialValues);
     const [fetching, setIsFetching] = useState(false);
 
     const schema = zod.object({
         title: zod.string().min(5, { message: "Title is required" }),
-        description: zod.string().min(5, { message: "Description is required" }),
+        description: zod.string().optional(),
         dueDate: zod.date({ message: 'Please pick a due date' })
     });
 
-    const { control, handleSubmit, formState: { errors } } = useForm({ defaultValues: initialValues, resolver: zodResolver(schema) });
+    const { control, handleSubmit, formState: { errors }, reset, } = useForm({ defaultValues: initialValues, resolver: zodResolver(schema) });
 
     const addTask = async (values) => {
         setIsFetching(true);
+
         let formData = {...values, dueDate: new Date(newTask.dueDate).toISOString(), status: newTask.status};
 
         try {
@@ -71,16 +72,19 @@ const TaskModal = ({ open, onClose, onCreate }) => {
                 if (onCreate && typeof onCreate === 'function') {
                     onCreate(data.response.task);
                 }
-                
+
+                setNewTask(initialValues);
+                reset(initialValues);
             }
 
         } catch ({ message, response }) {
+            let msg = message;
 
             if (response && response.data.status && response.data.status?.message) {
-                message = response.data.status.message;
+                msg = response.data.status.message;
             }
 
-            toast.error(message);
+            toast.error(msg);
         } finally {
             setIsFetching(false);
         }

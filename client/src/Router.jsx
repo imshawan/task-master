@@ -12,8 +12,6 @@ import About from "./screens/About";
 export default function Router() {
     const isAuthenticated = JSON.parse(localStorage.getItem('authenticated'));
 
-    console.log('isAuthenticated', isAuthenticated);
-    
     return (
         <BrowserRouter>
           <Routes>

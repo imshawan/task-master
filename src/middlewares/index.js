@@ -34,7 +34,7 @@ middlewares.checkRequiredFields = (fields, req, res, next) => {
         if (!req.body[field]) missing.push(field);
     }
 
-    if (missing.length) return response.format(400, res, `Missing fields: ${missing.join(', ')}`);
+    if (missing.length) return response.format(400, res, {message: `Missing fields: ${missing.join(', ')}`});
 
     next();
 };
