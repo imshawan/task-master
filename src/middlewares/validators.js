@@ -25,7 +25,7 @@ module.exports = {
         body('title').isString().trim().notEmpty().withMessage('Title is required'),
         body('description').optional(),
         body('status')
-            .notEmpty()
+            .optional()
             .isString()
             .trim()
             .isIn(['To Do', 'In Progress', 'Done', 'Discarded'])

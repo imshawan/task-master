@@ -49,7 +49,7 @@ taskApi.create = async function (req) {
         title,
         description,
         dueDate,
-        status,
+        status: status || 'To Do',
         author: user._id,
     });
 

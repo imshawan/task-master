@@ -48,7 +48,7 @@ const TaskModal = ({ open, onClose, onCreate }) => {
     const [fetching, setIsFetching] = useState(false);
 
     const schema = zod.object({
-        title: zod.string().min(5, { message: "Title is required" }),
+        title: zod.string().min(1, { message: "Title must be atleast 1 char" }),
         description: zod.string().optional(),
         dueDate: zod.date({ message: 'Please pick a due date' })
     });
