@@ -196,7 +196,7 @@ const Profile = () => {
 
     return (
         <React.Fragment>
-            <NavBar user={user} />
+            <NavBar user={{...user, fullname}} />
             <Box className={classes.root}>
                 <Container maxWidth="md" className={classes.container}>
                     <MotionContainer
