@@ -54,7 +54,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     missionPaper: {
         padding: theme.spacing(3),
-        marginTop: theme.spacing(4),
+        marginTop: theme.spacing(9),
         background: 'rgba(255, 255, 255, 0.6)',
         textAlign: 'center',
     },
