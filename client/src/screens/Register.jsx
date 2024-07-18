@@ -209,6 +209,7 @@ const Register = () => {
                                     }}
                                     errors={errors}
                                     {...field}
+                                    ref={null}
                                 />)}
                             />
                         </div>
@@ -236,6 +237,7 @@ const Register = () => {
                                     }}
                                     errors={errors}
                                     {...field}
+                                    ref={null}
                                 />)}
                             />
                         </div>
@@ -263,6 +265,7 @@ const Register = () => {
                                     }}
                                     errors={errors}
                                     {...field}
+                                    ref={null}
                                 />)}
                             />
                         </div>
@@ -301,6 +304,7 @@ const Register = () => {
                                     }}
                                     errors={errors}
                                     {...field}
+                                    ref={null}
                                 />)}
                             />
                         </div>
@@ -328,6 +332,7 @@ const Register = () => {
                                     }}
                                     errors={errors}
                                     {...field}
+                                    ref={null}
                                 />)}
                             />
                         </div>

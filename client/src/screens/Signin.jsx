@@ -194,6 +194,7 @@ const SignIn = () => {
                                 }}
                                 errors={errors}
                                 {...field}
+                                ref={null}
                             />)}
                         />
 
@@ -230,6 +231,7 @@ const SignIn = () => {
                                 }}
                                 errors={errors}
                                 {...field}
+                                ref={null}
                             />)}
                         />
 

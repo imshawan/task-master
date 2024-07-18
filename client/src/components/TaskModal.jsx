@@ -136,6 +136,7 @@ const TaskModal = ({ open, onClose, onCreate }) => {
                                 margin="normal"
                                 errors={errors}
                                 {...field}
+                                ref={null}
                             />)}
                         />
                     </Grid>
@@ -154,6 +155,7 @@ const TaskModal = ({ open, onClose, onCreate }) => {
                                 rows={4}
                                 errors={errors}
                                 {...field}
+                                ref={null}
                             />)}
                         />
                     </Grid>
@@ -188,8 +190,9 @@ const TaskModal = ({ open, onClose, onCreate }) => {
                                             value={newTask.dueDate}
                                             {...field}
                                             onChange={dueDateOnChange}
-                                            renderInput={(params) => <TextField {...params} fullWidth />}
-                                        />
+                                        >
+
+                                        </DatePicker>
                                     </LocalizationProvider>
                                 )}
                             />

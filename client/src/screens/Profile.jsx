@@ -278,6 +278,7 @@ const Profile = () => {
                                                 errors={errors}
                                                 {...field}
                                                 onChange={handeNameChange}
+                                                ref={null}
                                             />)}
                                         />
                                     </Grid>
