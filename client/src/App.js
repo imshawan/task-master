@@ -5,7 +5,6 @@ import '@fontsource/roboto/700.css';
 import "react-toastify/dist/ReactToastify.css";
 import './App.css';
 
-import { useEffect } from 'react';
 import { ThemeProvider } from '@mui/material/styles';
 import Router from './Router';
 import theme from './theme/colorTheme';

@@ -40,7 +40,7 @@ import { endpoints, parseParams } from '../utilities';
 const Swal = withReactContent(Sweetalert);
 const STATUSES = ['To Do', 'In Progress', 'Done', 'Discarded'];
 
-export default function TaskCard({ task, onDatachange, onRemove }) {
+export default function TaskCard({ task, onDatachange, onRemove, afterRemove }) {
     const { classes } = useStyles();
     const theme = useTheme();
     const [expandedTask, setExpandedTask] = useState(task._id);
@@ -103,6 +103,10 @@ export default function TaskCard({ task, onDatachange, onRemove }) {
                     let { data } = await window.axiosInstance.delete(parseParams(endpoints.DELETE_TASK, {id}));
                     if (data && data.response && data.response.message) {
                         toast.success(data.response.message);
+                    }
+
+                    if (afterRemove && typeof afterRemove === 'function') {
+                        afterRemove()
                     }
                 } catch ({ message, response }) {
                     let msg = message;

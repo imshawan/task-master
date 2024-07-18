@@ -1,5 +1,5 @@
 import React from "react";
-import { Button as MuiButton, useTheme } from "@mui/material";
+import { Button as MuiButton } from "@mui/material";
 
 export default function Button({children, ...props }) {
 

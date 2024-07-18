@@ -128,6 +128,11 @@ const TaskList = () => {
             }
             return [task, ...prev];
         });
+
+        if (tasks.length >= pagination.limit && pagination.nextPage <= 1) {
+            setPagination(prev => ({...prev, nextPage: prev.nextPage + 1, totalPages: prev.totalPages + 1}));
+        }
+
     };
     
 
@@ -290,7 +295,7 @@ const TaskList = () => {
                                     exit={{ opacity: 0, y: -20 }}
                                     transition={{ duration: 0.3 }}
                                 >   
-                                    <TaskCard task={task} onDatachange={onTaskUpdate} onRemove={onTaskRemove} />
+                                    <TaskCard task={task} onDatachange={onTaskUpdate} onRemove={onTaskRemove} afterRemove={() => loadTasks()} />
                                 </MotionCard>
                             ))}
                         </Box> : (loading ? <Loading title={'Loading Your Tasks'} /> : <NoTasks onAddTask={() => setOpenModal(true)} />)}
