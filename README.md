@@ -1,5 +1,5 @@
 # TaskMaster
-
+![image](https://github.com/imshawan/task-master/blob/main/docs/sign-in.png)
 TaskMaster is a task management application built with Node.js, Express, MongoDB, React, and Material-UI (MUI). The application allows users to manage their tasks efficiently with a clean and responsive user interface.
 
 ## Features
@@ -7,7 +7,7 @@ TaskMaster is a task management application built with Node.js, Express, MongoDB
 ### Task Management
 - **Create Tasks**: Users can create new tasks with a title, description, and status (e.g., "To Do," "In Progress," "Done").
 - **Update Tasks**: Users can update the details of existing tasks.
-- **Delete Tasks**: Users can delete tasks that are no longer needed.
+- **Delete Tasks**: Users can delete no longer needed tasks.
 - **View Tasks**: Users can view a list of all their tasks.
 - **Filter Tasks**: Users can filter tasks by status (e.g., "All", "To Do", "In Progress", "Done", "Discarded").
 - **Sort and Search Tasks**: Users can sort tasks by different criteria and search for tasks by keywords.
@@ -93,6 +93,10 @@ Displays user information, avatar, and brief statistics of their tasks and allow
    cd ./client
    npm start
    ```
+
+## Screenshots
+![image](https://github.com/imshawan/task-master/blob/main/docs/profile.png)
+![image](https://github.com/imshawan/task-master/blob/main/docs/about.png)
 
 ## License
 
