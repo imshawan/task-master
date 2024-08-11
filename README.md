@@ -48,7 +48,7 @@ Displays user information, avatar, and brief statistics of their tasks and allow
 ### Back-End
 - **Node.js**: A JavaScript runtime for server-side development.
 - **Express**: A web application framework for Node.js.
-- **MongoDB**: A NoSQL database for storing task data.
+- **MongoDB**: A NoSQL database for storing data across the application.
 
 ### Authentication
 - **JWT**: JSON Web Tokens for secure authentication and authorization.
